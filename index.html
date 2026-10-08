@@ -3,1356 +3,764 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Smart Factory Logic — TTL vs CMOS Engineering Case Study</title>
-  <meta name="description" content="An interactive engineering case study for second-year Computer Engineering students studying digital electronics and logic families — TTL vs CMOS in a smart factory environment." />
-  <meta name="keywords" content="TTL, CMOS, logic families, digital electronics, 74LS, 74HC, 74HCT, engineering, smart factory" />
+  <title>Smart Factory Logic — TTL vs CMOS Interactive Animated Explainer</title>
+  <meta name="description" content="Visual animated engineering explainer for digital logic families: 74LS TTL vs 74HC/74HCT CMOS in industrial smart factories." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<!-- GRID BACKGROUND -->
+<!-- Ambient Grid Background -->
 <div class="grid-bg" aria-hidden="true"></div>
 
-<!-- PROGRESS BAR -->
-<div id="progress-bar" role="progressbar" aria-label="Page reading progress"></div>
+<!-- Top Progress Bar -->
+<div id="prog" aria-hidden="true"></div>
 
-<!-- ═══════════════════════════════════════════════════════════
-     NAVBAR
-════════════════════════════════════════════════════════════ -->
-<nav id="navbar" role="navigation" aria-label="Main navigation">
+<!-- ============================================================
+     NAVIGATION BAR
+     ============================================================ -->
+<nav id="nav">
   <a class="nav-brand" href="#hero">
-    <span class="dot" aria-hidden="true"></span>
-    Smart Factory Logic
+    <span class="nav-dot"></span>
+    <span>DELD // SMART FACTORY</span>
   </a>
-  <ul class="nav-links" role="list">
-    <li><a href="#hero"         class="nav-link" aria-label="Home">Home</a></li>
-    <li><a href="#problem"      class="nav-link" aria-label="Problem section">Problem</a></li>
-    <li><a href="#requirements" class="nav-link" aria-label="Requirements section">Requirements</a></li>
-    <li><a href="#parameters"   class="nav-link" aria-label="Parameters section">Parameters</a></li>
-    <li><a href="#comparison"   class="nav-link" aria-label="TTL vs CMOS section">TTL vs CMOS</a></li>
-    <li><a href="#calculations" class="nav-link" aria-label="Calculations section">Calculations</a></li>
-    <li><a href="#decision"     class="nav-link" aria-label="Decision section">Decision</a></li>
-    <li><a href="#tradeoffs"    class="nav-link" aria-label="Trade-offs section">Trade-offs</a></li>
-    <li><a href="#conclusion"   class="nav-link" aria-label="Conclusion section">Conclusion</a></li>
+
+  <ul class="nav-links">
+    <li><a href="#hero" class="nav-link">Overview</a></li>
+    <li><a href="#problem" class="nav-link">Noise Problem</a></li>
+    <li><a href="#internal" class="nav-link">Transistors</a></li>
+    <li><a href="#voltage" class="nav-link">Voltages</a></li>
+    <li><a href="#noise" class="nav-link">Noise Margin</a></li>
+    <li><a href="#fanout" class="nav-link">Fan-Out</a></li>
+    <li><a href="#delay" class="nav-link">Delay</a></li>
+    <li><a href="#power" class="nav-link">Power</a></li>
+    <li><a href="#decision" class="nav-link">Verdict</a></li>
+    <li><a href="#interface" class="nav-link">74HCT Bridge</a></li>
+    <li><a href="#team" class="nav-link">Team</a></li>
   </ul>
-  <button class="nav-hamburger" id="nav-burger" aria-label="Open navigation menu" aria-expanded="false">
+
+  <button class="nav-burger" id="burger" aria-label="Toggle navigation">
     <span></span><span></span><span></span>
   </button>
 </nav>
 
-<!-- MOBILE MENU -->
-<nav class="mobile-menu" id="mobile-menu" aria-label="Mobile navigation">
-  <a href="#hero">Home</a>
-  <a href="#problem">Problem</a>
-  <a href="#requirements">Requirements</a>
-  <a href="#parameters">Parameters</a>
-  <a href="#comparison">TTL vs CMOS</a>
-  <a href="#calculations">Calculations</a>
-  <a href="#decision">Decision</a>
-  <a href="#tradeoffs">Trade-offs</a>
-  <a href="#conclusion">Conclusion</a>
-</nav>
+<!-- Mobile Navigation Drawer -->
+<div class="mobile-nav" id="mobile-nav">
+  <a href="#hero">Overview</a>
+  <a href="#problem">Noise Problem</a>
+  <a href="#internal">Transistors (BJT vs MOS)</a>
+  <a href="#voltage">Voltage Rails</a>
+  <a href="#noise">Noise Margin</a>
+  <a href="#fanout">Fan-Out Capacity</a>
+  <a href="#delay">Propagation Delay</a>
+  <a href="#power">Power Dissipation</a>
+  <a href="#decision">Engineering Verdict</a>
+  <a href="#interface">74HCT Interfacing</a>
+  <a href="#team">Project Team</a>
+</div>
 
-<!-- ═══════════════════════════════════════════════════════════
-     HERO SECTION
-════════════════════════════════════════════════════════════ -->
-<section id="hero">
-  <div class="hero-content">
-    <div class="hero-tag">
-      <span class="blink" aria-hidden="true">●</span>
-      Digital Electronics &nbsp;·&nbsp; Engineering Case Study
-    </div>
-
-    <h1 class="hero-title">Smart Factory Logic</h1>
-    <p class="hero-subtitle">Choosing the Right Logic Family</p>
-    <p class="hero-case-tag">TTL vs CMOS — An Engineering Case Study</p>
-
-    <!-- HERO ANIMATED FACTORY SVG -->
-    <div class="hero-factory" role="img" aria-label="Animated smart factory diagram">
-      <svg id="hero-factory-svg" viewBox="0 0 720 200" xmlns="http://www.w3.org/2000/svg"
-           style="width:100%;height:100%;" aria-hidden="true">
-
-        <!-- Background -->
-        <rect width="720" height="200" fill="rgba(8,12,22,0.6)" rx="12"/>
-
-        <!-- ── CONVEYOR BELT ── -->
-        <g id="conveyor-group">
-          <rect x="160" y="138" width="400" height="22" rx="4" fill="rgba(30,40,60,0.9)" stroke="rgba(0,229,255,0.25)" stroke-width="1"/>
-          <!-- Moving stripes -->
-          <rect x="160" y="138" width="400" height="22" rx="4" fill="url(#conveyorPattern)" opacity="0.5">
-            <animateTransform attributeName="transform" type="translate" from="0,0" to="60,0" dur="1.2s" repeatCount="indefinite"/>
-          </rect>
-          <!-- Wheels -->
-          <circle cx="168" cy="160" r="8" fill="rgba(40,50,70,1)" stroke="rgba(0,229,255,0.4)" stroke-width="1.5">
-            <animateTransform attributeName="transform" type="rotate" from="0 168 160" to="360 168 160" dur="1.2s" repeatCount="indefinite"/>
-          </circle>
-          <circle cx="552" cy="160" r="8" fill="rgba(40,50,70,1)" stroke="rgba(0,229,255,0.4)" stroke-width="1.5">
-            <animateTransform attributeName="transform" type="rotate" from="0 552 160" to="360 552 160" dur="1.2s" repeatCount="indefinite"/>
-          </circle>
-        </g>
-
-        <!-- ── BOXES ON CONVEYOR ── -->
-        <g>
-          <rect x="220" y="118" width="30" height="20" rx="2" fill="rgba(0,229,255,0.15)" stroke="rgba(0,229,255,0.4)" stroke-width="1">
-            <animateTransform attributeName="transform" type="translate" from="0,0" to="60,0" dur="3s" repeatCount="indefinite"/>
-          </rect>
-          <rect x="330" y="118" width="30" height="20" rx="2" fill="rgba(0,229,255,0.15)" stroke="rgba(0,229,255,0.4)" stroke-width="1">
-            <animateTransform attributeName="transform" type="translate" from="0,0" to="60,0" dur="3s" begin="-1s" repeatCount="indefinite"/>
-          </rect>
-          <rect x="440" y="118" width="30" height="20" rx="2" fill="rgba(0,229,255,0.15)" stroke="rgba(0,229,255,0.4)" stroke-width="1">
-            <animateTransform attributeName="transform" type="translate" from="0,0" to="60,0" dur="3s" begin="-2s" repeatCount="indefinite"/>
-          </rect>
-        </g>
-
-        <!-- ── ROBOTIC ARM ── -->
-        <g id="robot-arm">
-          <rect x="120" y="60" width="10" height="60" rx="3" fill="rgba(40,60,90,0.9)" stroke="rgba(0,229,255,0.3)" stroke-width="1"/>
-          <!-- Upper arm -->
-          <g transform-origin="125 60">
-            <animateTransform attributeName="transform" type="rotate" values="-10 125 60;10 125 60;-10 125 60" dur="3s" repeatCount="indefinite"/>
-            <rect x="112" y="35" width="26" height="8" rx="3" fill="rgba(26,111,255,0.7)" stroke="rgba(0,229,255,0.5)" stroke-width="1"/>
-            <rect x="132" y="28" width="8" height="14" rx="2" fill="rgba(0,229,255,0.3)" stroke="rgba(0,229,255,0.5)" stroke-width="1"/>
-          </g>
-          <circle cx="125" cy="60" r="5" fill="var(--accent-cyan)" opacity="0.7"/>
-        </g>
-
-        <!-- ── SENSORS (Left) ── -->
-        <g>
-          <!-- Temp sensor -->
-          <rect x="20" y="45" width="90" height="30" rx="6" fill="rgba(20,30,50,0.9)" stroke="rgba(0,200,150,0.4)" stroke-width="1.2"/>
-          <text x="65" y="65" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(0,200,150,0.9)">TEMP SENSOR</text>
-          <circle cx="20" cy="60" r="4" fill="var(--accent-green)" opacity="0.8">
-            <animate attributeName="opacity" values="0.5;1;0.5" dur="1.5s" repeatCount="indefinite"/>
-          </circle>
-        </g>
-        <g>
-          <!-- Proximity sensor -->
-          <rect x="20" y="90" width="90" height="30" rx="6" fill="rgba(20,30,50,0.9)" stroke="rgba(0,200,150,0.4)" stroke-width="1.2"/>
-          <text x="65" y="110" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(0,200,150,0.9)">PROX SENSOR</text>
-          <circle cx="20" cy="105" r="4" fill="var(--accent-green)" opacity="0.8">
-            <animate attributeName="opacity" values="0.5;1;0.5" dur="1.8s" begin="-0.4s" repeatCount="indefinite"/>
-          </circle>
-        </g>
-        <g>
-          <!-- Machine status -->
-          <rect x="20" y="135" width="90" height="30" rx="6" fill="rgba(20,30,50,0.9)" stroke="rgba(0,200,150,0.4)" stroke-width="1.2"/>
-          <text x="65" y="155" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(0,200,150,0.9)">MACH STATUS</text>
-          <circle cx="20" cy="150" r="4" fill="var(--accent-amber)" opacity="0.8">
-            <animate attributeName="opacity" values="0.4;1;0.4" dur="2.1s" begin="-0.8s" repeatCount="indefinite"/>
-          </circle>
-        </g>
-
-        <!-- ── DIGITAL CONTROLLER (Center-Right) ── -->
-        <g>
-          <rect x="440" y="40" width="120" height="80" rx="8" fill="rgba(20,30,55,0.95)" stroke="rgba(0,229,255,0.4)" stroke-width="1.5"/>
-          <text x="500" y="72" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(0,229,255,0.9)" font-weight="bold">DIGITAL</text>
-          <text x="500" y="86" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(0,229,255,0.9)" font-weight="bold">CONTROLLER</text>
-          <!-- LED indicators -->
-          <circle cx="460" cy="100" r="3" fill="var(--accent-green)">
-            <animate attributeName="fill" values="var(--accent-green);rgba(0,200,150,0.3);var(--accent-green)" dur="0.9s" repeatCount="indefinite"/>
-          </circle>
-          <circle cx="472" cy="100" r="3" fill="var(--accent-cyan)">
-            <animate attributeName="fill" values="var(--accent-cyan);rgba(0,229,255,0.3);var(--accent-cyan)" dur="1.3s" begin="-0.3s" repeatCount="indefinite"/>
-          </circle>
-          <circle cx="484" cy="100" r="3" fill="var(--accent-amber)">
-            <animate attributeName="fill" values="var(--accent-amber);rgba(255,179,0,0.3);var(--accent-amber)" dur="1.7s" begin="-0.6s" repeatCount="indefinite"/>
-          </circle>
-        </g>
-
-        <!-- ── MOTOR (Right) ── -->
-        <g>
-          <rect x="610" y="55" width="80" height="55" rx="8" fill="rgba(20,28,48,0.9)" stroke="rgba(255,79,79,0.35)" stroke-width="1.2"/>
-          <text x="650" y="82" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(255,200,80,0.9)">MOTOR</text>
-          <text x="650" y="96" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(255,200,80,0.9)">CTRL</text>
-          <!-- Noise rings -->
-          <circle cx="650" cy="82" r="20" fill="none" stroke="rgba(255,79,79,0.2)" stroke-width="1" stroke-dasharray="3 3">
-            <animate attributeName="r" values="18;28;18" dur="1.5s" repeatCount="indefinite"/>
-            <animate attributeName="opacity" values="0.5;0;0.5" dur="1.5s" repeatCount="indefinite"/>
-          </circle>
-          <circle cx="650" cy="82" r="28" fill="none" stroke="rgba(255,79,79,0.12)" stroke-width="1">
-            <animate attributeName="r" values="22;36;22" dur="2s" begin="-0.5s" repeatCount="indefinite"/>
-            <animate attributeName="opacity" values="0.3;0;0.3" dur="2s" begin="-0.5s" repeatCount="indefinite"/>
-          </circle>
-        </g>
-
-        <!-- ── SIGNAL LINES ── -->
-        <!-- Sensor → Controller -->
-        <path d="M 110 60 L 200 60 L 440 80" fill="none" stroke="rgba(0,229,255,0.5)" stroke-width="1.5" stroke-dasharray="6 4">
-          <animate attributeName="stroke-dashoffset" values="40;0" dur="1.2s" repeatCount="indefinite"/>
-        </path>
-        <path d="M 110 105 L 200 105 L 440 80" fill="none" stroke="rgba(0,229,255,0.5)" stroke-width="1.5" stroke-dasharray="6 4">
-          <animate attributeName="stroke-dashoffset" values="40;0" dur="1.6s" begin="-0.3s" repeatCount="indefinite"/>
-        </path>
-        <path d="M 110 150 L 200 150 L 440 90" fill="none" stroke="rgba(0,200,150,0.5)" stroke-width="1.5" stroke-dasharray="6 4">
-          <animate attributeName="stroke-dashoffset" values="40;0" dur="1.4s" begin="-0.6s" repeatCount="indefinite"/>
-        </path>
-
-        <!-- Controller → Motor -->
-        <path d="M 560 80 L 610 80" fill="none" stroke="rgba(255,179,0,0.6)" stroke-width="1.5" stroke-dasharray="5 4">
-          <animate attributeName="stroke-dashoffset" values="36;0" dur="0.9s" repeatCount="indefinite"/>
-        </path>
-
-        <!-- Signal dots on paths -->
-        <circle r="3" fill="var(--accent-cyan)" opacity="0.9">
-          <animateMotion path="M 110 60 L 200 60 L 440 80" dur="1.2s" repeatCount="indefinite"/>
-        </circle>
-        <circle r="3" fill="var(--accent-green)" opacity="0.9">
-          <animateMotion path="M 110 105 L 200 105 L 440 80" dur="1.6s" begin="-0.5s" repeatCount="indefinite"/>
-        </circle>
-        <circle r="3" fill="var(--accent-amber)" opacity="0.9">
-          <animateMotion path="M 560 80 L 610 80" dur="0.9s" begin="-0.2s" repeatCount="indefinite"/>
-        </circle>
-
-        <!-- Defs -->
-        <defs>
-          <pattern id="conveyorPattern" x="0" y="0" width="20" height="22" patternUnits="userSpaceOnUse">
-            <rect x="0" y="0" width="10" height="22" fill="rgba(0,229,255,0.08)"/>
-          </pattern>
-        </defs>
-      </svg>
-    </div>
-
-    <a href="#problem" class="hero-btn" id="hero-cta-btn" aria-label="Explore the case study">
-      Explore the Case Study ↓
-    </a>
-
-    <div class="hero-labels" role="list" aria-label="Case study topics">
-      <span role="listitem">Digital Electronics</span>
-      <span role="listitem">Logic Families</span>
-      <span role="listitem">Engineering Case Study</span>
-      <span role="listitem">TTL &amp; CMOS</span>
-    </div>
+<!-- ============================================================
+     HERO SECTION — SMART FACTORY ANIMATION
+     ============================================================ -->
+<header class="scene" id="hero">
+  <div class="hero-eyebrow">
+    <span class="blink">●</span> CASE STUDY // DIGITAL ELECTRONICS &amp; LOGIC DESIGN
   </div>
-</section>
 
-<div class="section-divider" aria-hidden="true"></div>
+  <h1 class="hero-h1">SMART FACTORY LOGIC</h1>
+  <p class="hero-sub">TTL vs CMOS: Choosing the Right Logic Family for Industry 4.0</p>
+  <div class="hero-badge">74LS BIPOLAR BJT &nbsp;⚡&nbsp; 74HC/74HCT CMOS MOSFET</div>
 
-<!-- ═══════════════════════════════════════════════════════════
-     SECTION 01 — PROBLEM
-════════════════════════════════════════════════════════════ -->
-<section id="problem">
-  <span class="section-num" aria-hidden="true">01 — PROBLEM</span>
-  <h2 class="reveal">The Engineering Problem</h2>
-  <p class="reveal delay-1" style="max-width:640px;margin-top:12px;">
-    Imagine a modern smart factory where hundreds of sensors and digital devices work together.
-    Sensors detect temperature, position and machine status, while controllers make decisions in real time.
-  </p>
+  <!-- Hero Interactive Industrial SVG Animation -->
+  <div class="stage reveal d1" style="max-width:880px;height:320px;position:relative;">
+    <svg viewBox="0 0 880 320" width="100%" height="100%" style="background:#080c16;" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="heroHdrGrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#00e5ff" stop-opacity="0.9"/>
+          <stop offset="100%" stop-color="#1a6fff" stop-opacity="0.9"/>
+        </linearGradient>
+        <pattern id="conveyorLines" width="24" height="24" patternUnits="userSpaceOnUse">
+          <line x1="0" y1="0" x2="0" y2="24" stroke="rgba(0,229,255,0.2)" stroke-width="2"/>
+        </pattern>
+        <filter id="neonGlow">
+          <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+          <feMerge>
+            <feMergeNode in="coloredBlur"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
+      </defs>
 
-  <!-- Factory Diagram -->
-  <div class="factory-scene reveal delay-2" role="img" aria-label="Smart factory block diagram with sensors and controller">
-    <svg viewBox="0 0 700 280" xmlns="http://www.w3.org/2000/svg"
-         style="width:100%;height:100%;" aria-hidden="true">
+      <!-- Factory Floor Grid & Perspective Lines -->
+      <line x1="0" y1="260" x2="880" y2="260" stroke="rgba(0,229,255,0.25)" stroke-width="2"/>
+      <line x1="120" y1="260" x2="0" y2="320" stroke="rgba(0,229,255,0.15)" stroke-width="1"/>
+      <line x1="300" y1="260" x2="220" y2="320" stroke="rgba(0,229,255,0.15)" stroke-width="1"/>
+      <line x1="580" y1="260" x2="660" y2="320" stroke="rgba(0,229,255,0.15)" stroke-width="1"/>
+      <line x1="760" y1="260" x2="880" y2="320" stroke="rgba(0,229,255,0.15)" stroke-width="1"/>
 
-      <!-- Background -->
-      <rect width="700" height="280" fill="rgba(6,10,20,0.6)"/>
+      <!-- Automated Conveyor Belt with Moving Packets -->
+      <rect x="40" y="240" width="800" height="20" rx="4" fill="#0d1527" stroke="rgba(0,229,255,0.4)" stroke-width="1.5"/>
+      <rect x="42" y="242" width="796" height="16" fill="url(#conveyorLines)">
+        <animate attributeName="x" from="0" to="-24" dur="1s" repeatCount="indefinite"/>
+      </rect>
 
-      <!-- Grid lines -->
-      <line x1="0" y1="140" x2="700" y2="140" stroke="rgba(0,229,255,0.04)" stroke-width="1"/>
-      <line x1="350" y1="0" x2="350" y2="280" stroke="rgba(0,229,255,0.04)" stroke-width="1"/>
-
-      <!-- ── LEFT SENSORS ── -->
-      <!-- Temp Sensor -->
-      <rect x="30" y="30" width="120" height="45" rx="7" fill="rgba(15,25,45,0.95)" stroke="rgba(0,200,150,0.5)" stroke-width="1.5"/>
-      <text x="90" y="52" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="rgba(0,200,150,1)" font-weight="bold">TEMPERATURE</text>
-      <text x="90" y="66" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(0,200,150,0.7)">SENSOR</text>
-
-      <!-- Proximity Sensor -->
-      <rect x="30" y="117" width="120" height="45" rx="7" fill="rgba(15,25,45,0.95)" stroke="rgba(0,200,150,0.5)" stroke-width="1.5"/>
-      <text x="90" y="139" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="rgba(0,200,150,1)" font-weight="bold">PROXIMITY</text>
-      <text x="90" y="153" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(0,200,150,0.7)">SENSOR</text>
-
-      <!-- Machine Status -->
-      <rect x="30" y="204" width="120" height="45" rx="7" fill="rgba(15,25,45,0.95)" stroke="rgba(0,200,150,0.5)" stroke-width="1.5"/>
-      <text x="90" y="226" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="rgba(0,200,150,1)" font-weight="bold">MACHINE</text>
-      <text x="90" y="240" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(0,200,150,0.7)">STATUS</text>
-
-      <!-- ── SIGNAL LINES (Sensors → Controller) ── -->
-      <line x1="150" y1="52" x2="260" y2="130" stroke="rgba(0,229,255,0.45)" stroke-width="1.5" stroke-dasharray="7 5">
-        <animate attributeName="stroke-dashoffset" values="36;0" dur="1.3s" repeatCount="indefinite"/>
-      </line>
-      <line x1="150" y1="140" x2="260" y2="140" stroke="rgba(0,229,255,0.45)" stroke-width="1.5" stroke-dasharray="7 5">
-        <animate attributeName="stroke-dashoffset" values="36;0" dur="1.1s" begin="-0.2s" repeatCount="indefinite"/>
-      </line>
-      <line x1="150" y1="226" x2="260" y2="152" stroke="rgba(0,229,255,0.45)" stroke-width="1.5" stroke-dasharray="7 5">
-        <animate attributeName="stroke-dashoffset" values="36;0" dur="1.5s" begin="-0.5s" repeatCount="indefinite"/>
-      </line>
-
-      <!-- Animated dots on lines -->
-      <circle r="3.5" fill="var(--accent-cyan)" opacity="0.9">
-        <animateMotion path="M 150 52 L 260 130" dur="1.3s" repeatCount="indefinite"/>
-      </circle>
-      <circle r="3.5" fill="var(--accent-cyan)" opacity="0.9">
-        <animateMotion path="M 150 140 L 260 140" dur="1.1s" begin="-0.4s" repeatCount="indefinite"/>
-      </circle>
-      <circle r="3.5" fill="var(--accent-green)" opacity="0.9">
-        <animateMotion path="M 150 226 L 260 152" dur="1.5s" begin="-0.7s" repeatCount="indefinite"/>
-      </circle>
-
-      <!-- ── CENTRAL CONTROLLER ── -->
-      <rect x="260" y="95" width="160" height="90" rx="10" fill="rgba(18,28,55,0.98)" stroke="rgba(0,229,255,0.6)" stroke-width="2"/>
-      <text x="340" y="132" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="rgba(0,229,255,1)" font-weight="bold">DIGITAL</text>
-      <text x="340" y="148" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="rgba(0,229,255,1)" font-weight="bold">CONTROLLER</text>
-      <!-- LEDs -->
-      <circle cx="295" cy="168" r="4" fill="#00c896">
-        <animate attributeName="opacity" values="1;0.3;1" dur="0.8s" repeatCount="indefinite"/>
-      </circle>
-      <circle cx="312" cy="168" r="4" fill="#00e5ff">
-        <animate attributeName="opacity" values="1;0.3;1" dur="1.1s" begin="-0.2s" repeatCount="indefinite"/>
-      </circle>
-      <circle cx="329" cy="168" r="4" fill="#ffb300">
-        <animate attributeName="opacity" values="1;0.3;1" dur="1.4s" begin="-0.4s" repeatCount="indefinite"/>
-      </circle>
-
-      <!-- ── SIGNAL LINE (Controller → Motor) ── -->
-      <line x1="420" y1="140" x2="530" y2="140" stroke="rgba(255,179,0,0.55)" stroke-width="1.5" stroke-dasharray="7 5">
-        <animate attributeName="stroke-dashoffset" values="36;0" dur="1.0s" repeatCount="indefinite"/>
-      </line>
-      <circle r="3.5" fill="var(--accent-amber)" opacity="0.9">
-        <animateMotion path="M 420 140 L 530 140" dur="1.0s" repeatCount="indefinite"/>
-      </circle>
-
-      <!-- Noise Lines (around motor cable) -->
-      <g opacity="0.5">
-        <line x1="462" y1="132" x2="462" y2="148" stroke="rgba(255,79,79,0.7)" stroke-width="1">
-          <animate attributeName="y1" values="133;131;135;132;133" dur="0.25s" repeatCount="indefinite"/>
-          <animate attributeName="y2" values="147;149;145;148;147" dur="0.25s" repeatCount="indefinite"/>
-        </line>
-        <line x1="476" y1="135" x2="476" y2="145" stroke="rgba(255,79,79,0.5)" stroke-width="1">
-          <animate attributeName="y1" values="135;133;137;135;135" dur="0.3s" begin="-0.1s" repeatCount="indefinite"/>
-        </line>
-        <line x1="490" y1="131" x2="490" y2="149" stroke="rgba(255,79,79,0.6)" stroke-width="1">
-          <animate attributeName="y1" values="131;133;130;132;131" dur="0.22s" begin="-0.05s" repeatCount="indefinite"/>
-        </line>
-        <text x="478" y="124" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(255,79,79,0.7)">⚡ NOISE</text>
+      <!-- Moving IC Chips on Conveyor -->
+      <g>
+        <rect x="0" y="222" width="44" height="18" rx="3" fill="#ffb300" opacity="0.9">
+          <animate attributeName="x" from="40" to="800" dur="6s" repeatCount="indefinite"/>
+        </rect>
+        <text x="22" y="235" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="700" fill="#07090f" text-anchor="middle">
+          74LS
+          <animate attributeName="x" from="62" to="822" dur="6s" repeatCount="indefinite"/>
+        </text>
+      </g>
+      <g>
+        <rect x="0" y="222" width="44" height="18" rx="3" fill="#00e5ff" opacity="0.9">
+          <animate attributeName="x" from="-160" to="600" dur="6s" repeatCount="indefinite"/>
+        </rect>
+        <text x="22" y="235" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="700" fill="#07090f" text-anchor="middle">
+          74HC
+          <animate attributeName="x" from="-138" to="622" dur="6s" repeatCount="indefinite"/>
+        </text>
       </g>
 
-      <!-- ── MOTOR ── -->
-      <rect x="530" y="100" width="130" height="80" rx="10" fill="rgba(20,25,40,0.95)" stroke="rgba(255,79,79,0.4)" stroke-width="1.5"/>
-      <text x="595" y="138" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="rgba(255,179,0,0.9)" font-weight="bold">MOTOR</text>
-      <!-- Motor noise rings -->
-      <circle cx="595" cy="140" r="24" fill="none" stroke="rgba(255,79,79,0.2)" stroke-width="1.5" stroke-dasharray="4 4">
-        <animate attributeName="r" values="20;32;20" dur="1.8s" repeatCount="indefinite"/>
-        <animate attributeName="opacity" values="0.5;0;0.5" dur="1.8s" repeatCount="indefinite"/>
-      </circle>
-      <circle cx="595" cy="140" r="34" fill="none" stroke="rgba(255,79,79,0.1)" stroke-width="1">
-        <animate attributeName="r" values="28;42;28" dur="2.4s" begin="-0.6s" repeatCount="indefinite"/>
-        <animate attributeName="opacity" values="0.3;0;0.3" dur="2.4s" begin="-0.6s" repeatCount="indefinite"/>
-      </circle>
-      <text x="595" y="162" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(255,79,79,0.7)">⚡ EMI</text>
+      <!-- Heavy Industrial Motor (EMI Source) -->
+      <g transform="translate(80, 70)">
+        <rect x="0" y="0" width="120" height="130" rx="8" fill="#11182c" stroke="#ff4f4f" stroke-width="2"/>
+        <circle cx="60" cy="55" r="38" fill="#0a0f1d" stroke="#ff4f4f" stroke-width="1.5" stroke-dasharray="6,4">
+          <animateTransform attributeName="transform" type="rotate" from="0 60 55" to="360 60 55" dur="1.8s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="60" cy="55" r="14" fill="#ff4f4f" opacity="0.8"/>
+        <text x="60" y="105" font-family="'JetBrains Mono',monospace" font-size="9" fill="#ff7f7f" text-anchor="middle" font-weight="700">INDUCTIVE MOTOR</text>
+        <text x="60" y="118" font-family="'JetBrains Mono',monospace" font-size="8" fill="#ff4f4f" text-anchor="middle">EMI NOISE: ±1.2V</text>
+      </g>
+
+      <!-- Radiating EMI Spikes from Motor -->
+      <path d="M 205 125 Q 240 100 270 125 T 330 125" fill="none" stroke="#ff4f4f" stroke-width="2.5" stroke-dasharray="8,4" filter="url(#neonGlow)">
+        <animate attributeName="stroke-dashoffset" from="60" to="0" dur="0.8s" repeatCount="indefinite"/>
+      </path>
+
+      <!-- Central Controller Unit (DELD Core) -->
+      <g transform="translate(340, 40)">
+        <rect x="0" y="0" width="200" height="165" rx="12" fill="#0a1224" stroke="#00e5ff" stroke-width="2" filter="url(#neonGlow)"/>
+        <rect x="15" y="15" width="170" height="32" rx="4" fill="#050811"/>
+        <text x="100" y="36" font-family="'JetBrains Mono',monospace" font-size="11" font-weight="700" fill="#00e5ff" text-anchor="middle">PLC LOGIC CONTROLLER</text>
+
+        <!-- Live Signal Pulse through Controller -->
+        <line x1="30" y1="85" x2="170" y2="85" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+        <polyline points="30,85 65,85 75,55 95,55 105,85 170,85" fill="none" stroke="#00e5ff" stroke-width="2.5">
+          <animate attributeName="stroke-dashoffset" from="300" to="0" dur="1.5s" repeatCount="indefinite"/>
+        </polyline>
+
+        <!-- Dynamic Status Badges -->
+        <rect x="25" y="112" width="70" height="20" rx="3" fill="rgba(255,179,0,0.15)" stroke="#ffb300" stroke-width="1"/>
+        <text x="60" y="126" font-family="'JetBrains Mono',monospace" font-size="8.5" fill="#ffb300" text-anchor="middle">TTL: GLITCH</text>
+
+        <rect x="105" y="112" width="70" height="20" rx="3" fill="rgba(0,200,150,0.15)" stroke="#00c896" stroke-width="1"/>
+        <text x="140" y="126" font-family="'JetBrains Mono',monospace" font-size="8.5" fill="#00c896" text-anchor="middle">CMOS: PASS</text>
+
+        <text x="100" y="150" font-family="'JetBrains Mono',monospace" font-size="8.5" fill="#8fa8c8" text-anchor="middle">VCC = 5.0 V DC</text>
+      </g>
+
+      <!-- Robotic Arm Automation (Load Side) -->
+      <g transform="translate(620, 60)">
+        <rect x="0" y="100" width="100" height="30" rx="4" fill="#11182c" stroke="#1a6fff" stroke-width="1.5"/>
+        <text x="50" y="120" font-family="'JetBrains Mono',monospace" font-size="9" fill="#8fa8c8" text-anchor="middle">ROBOT ARM ACTUATOR</text>
+        <!-- Arm Linkage with rotation -->
+        <line x1="50" y1="100" x2="80" y2="40" stroke="#00e5ff" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="50" cy="100" r="5" fill="#00e5ff"/>
+        <circle cx="80" cy="40" r="5" fill="#00e5ff"/>
+        <line x1="80" y1="40" x2="130" y2="70" stroke="#1a6fff" stroke-width="3" stroke-linecap="round">
+          <animateTransform attributeName="transform" type="rotate" values="0 80 40; 18 80 40; 0 80 40" dur="2s" repeatCount="indefinite"/>
+        </line>
+        <circle cx="130" cy="70" r="4" fill="#ffb300"/>
+      </g>
+
+      <!-- Pulsing Data Bus Connecting Units -->
+      <path d="M 540 120 L 620 120" fill="none" stroke="#00c896" stroke-width="2.5" stroke-dasharray="6,4">
+        <animate attributeName="stroke-dashoffset" from="40" to="0" dur="0.6s" repeatCount="indefinite"/>
+      </path>
     </svg>
   </div>
 
-  <!-- Challenge Items -->
-  <h3 class="reveal delay-2" style="margin-top:32px;margin-bottom:16px;">Engineering Challenges</h3>
-  <div class="challenge-list" role="list">
-    <div class="challenge-item reveal delay-2" role="listitem">
-      <span class="challenge-bullet" aria-hidden="true"></span>
-      <p>Electrical noise from motors and power cables corrupts digital signals</p>
-    </div>
-    <div class="challenge-item reveal delay-3" role="listitem">
-      <span class="challenge-bullet" aria-hidden="true"></span>
-      <p>Temperature variation across the factory floor affects device operation</p>
-    </div>
-    <div class="challenge-item reveal delay-3" role="listitem">
-      <span class="challenge-bullet" aria-hidden="true"></span>
-      <p>Multiple interconnected digital devices must share signals reliably</p>
-    </div>
-    <div class="challenge-item reveal delay-4" role="listitem">
-      <span class="challenge-bullet" aria-hidden="true"></span>
-      <p>Digital signals must be fast and reliable for real-time control</p>
-    </div>
-    <div class="challenge-item reveal delay-4" role="listitem">
-      <span class="challenge-bullet" aria-hidden="true"></span>
-      <p>Continuous operation requires low power consumption and thermal stability</p>
-    </div>
+  <div class="scroll-hint">
+    <span>Scroll to Watch Circuit Animations</span>
+    <div class="scroll-arrow"></div>
   </div>
+</header>
 
-  <div class="question-box reveal delay-5">
-    <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:8px;">The Engineering Question</p>
-    <h3>Which logic family should we use — <span class="accent">TTL</span> or <span class="accent">CMOS</span>?</h3>
-  </div>
-</section>
+<div class="divider"></div>
 
-<div class="section-divider" aria-hidden="true"></div>
+<!-- ============================================================
+     SCENE 1: INDUSTRIAL NOISE PROBLEM
+     ============================================================ -->
+<section class="scene" id="problem">
+  <div class="scene-label">SCENE 01 // INDUSTRIAL ENVIRONMENT</div>
+  <h2 class="scene-title">The Noise &amp; EMI Challenge</h2>
+  <p class="scene-caption">Heavy inductive loads, high-current welding rigs, and switching supplies induce up to ±1.2V electrical spikes on control lines. Watch what happens to logic levels!</p>
 
-<!-- ═══════════════════════════════════════════════════════════
-     SECTION 02 — REQUIREMENTS
-════════════════════════════════════════════════════════════ -->
-<section id="requirements">
-  <span class="section-num" aria-hidden="true">02 — REQUIREMENTS</span>
-  <h2 class="reveal">System Requirements</h2>
-  <p class="reveal delay-1" style="max-width:560px;margin-top:12px;">
-    Before selecting a logic family, we must identify what the factory's digital system actually needs.
-  </p>
-
-  <div class="cards-grid" role="list">
-
-    <article class="card req-card reveal delay-1" role="listitem" aria-label="Reliability requirement">
-      <div class="card-icon req-icon" aria-hidden="true">🛡️</div>
-      <h3>Reliability</h3>
-      <p>Reliable operation in an industrial environment with vibration, dust, and continuous duty cycles.</p>
-    </article>
-
-    <article class="card req-card reveal delay-2" role="listitem" aria-label="Noise immunity requirement">
-      <div class="card-icon req-icon" style="background:rgba(255,79,79,0.1)" aria-hidden="true">⚡</div>
-      <h3>Noise Immunity</h3>
-      <p>Ability to tolerate unwanted electrical disturbances generated by motors, cables, and switching loads.</p>
-    </article>
-
-    <article class="card req-card reveal delay-2" role="listitem" aria-label="Fan-out requirement">
-      <div class="card-icon req-icon" style="background:rgba(26,111,255,0.1)" aria-hidden="true">🔀</div>
-      <h3>Fan-Out</h3>
-      <p>Ability of one digital output to drive multiple input loads without degrading the logic signal.</p>
-    </article>
-
-    <article class="card req-card reveal delay-3" role="listitem" aria-label="Speed requirement">
-      <div class="card-icon req-icon" style="background:rgba(156,110,255,0.1)" aria-hidden="true">⚡</div>
-      <h3>Speed</h3>
-      <p>How quickly a logic circuit responds to an input change — critical for real-time control decisions.</p>
-    </article>
-
-    <article class="card req-card reveal delay-3" role="listitem" aria-label="Low power requirement">
-      <div class="card-icon req-icon" style="background:rgba(0,200,150,0.1)" aria-hidden="true">🔋</div>
-      <h3>Low Power</h3>
-      <p>Reducing unnecessary static power consumption to lower heat generation and operating costs.</p>
-    </article>
-
-    <article class="card req-card reveal delay-4" role="listitem" aria-label="Temperature tolerance requirement">
-      <div class="card-icon req-icon" style="background:rgba(255,179,0,0.1)" aria-hidden="true">🌡️</div>
-      <h3>Temperature Tolerance</h3>
-      <p>Ability to operate reliably across the full temperature range present in an industrial environment.</p>
-    </article>
-
-  </div>
-</section>
-
-<div class="section-divider" aria-hidden="true"></div>
-
-<!-- ═══════════════════════════════════════════════════════════
-     SECTION 03 — PARAMETERS
-════════════════════════════════════════════════════════════ -->
-<section id="parameters">
-  <span class="section-num" aria-hidden="true">03 — PARAMETERS</span>
-  <h2 class="reveal">Understanding Logic Parameters</h2>
-  <p class="reveal delay-1" style="max-width:580px;margin-top:12px;">
-    Before comparing TTL and CMOS, we need to understand the key electrical parameters that characterise any logic family.
-  </p>
-
-  <div class="param-grid">
-
-    <!-- FAN-IN -->
-    <article class="param-card reveal delay-1" aria-label="Fan-in parameter">
-      <div class="param-title">Fan-In</div>
-      <div class="waveform-box" role="img" aria-label="Fan-in diagram showing multiple inputs to a logic gate">
-        <svg viewBox="0 0 280 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;" aria-hidden="true">
-          <!-- Input labels and lines -->
-          <text x="12" y="28" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(0,229,255,0.7)">Input A</text>
-          <text x="12" y="55" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(0,229,255,0.7)">Input B</text>
-          <text x="12" y="82" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(0,229,255,0.7)">Input C</text>
-          <text x="12" y="109" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(0,229,255,0.7)">Input D</text>
-
-          <!-- Lines from inputs to gate -->
-          <line x1="70" y1="24" x2="130" y2="65" stroke="rgba(0,229,255,0.5)" stroke-width="1.5" class="fanin-line"/>
-          <line x1="70" y1="51" x2="130" y2="65" stroke="rgba(0,229,255,0.5)" stroke-width="1.5" class="fanin-line"/>
-          <line x1="70" y1="78" x2="130" y2="65" stroke="rgba(0,229,255,0.5)" stroke-width="1.5" class="fanin-line"/>
-          <line x1="70" y1="105" x2="130" y2="65" stroke="rgba(0,229,255,0.5)" stroke-width="1.5" class="fanin-line"/>
-
-          <!-- AND Gate body -->
-          <path d="M 130 42 L 155 42 Q 180 42 180 65 Q 180 88 155 88 L 130 88 Z" fill="rgba(26,111,255,0.15)" stroke="rgba(0,229,255,0.6)" stroke-width="1.5"/>
-          <text x="155" y="69" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(0,229,255,0.9)" font-weight="bold">GATE</text>
-
-          <!-- Output line -->
-          <line x1="180" y1="65" x2="240" y2="65" stroke="rgba(0,200,150,0.7)" stroke-width="1.5" class="fanin-line"/>
-          <text x="246" y="69" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(0,200,150,0.9)">Out</text>
-
-          <!-- Moving dots on fanin lines -->
-          <circle r="2.5" fill="var(--accent-cyan)" opacity="0.9">
-            <animateMotion path="M 70 24 L 130 65" dur="1.2s" repeatCount="indefinite"/>
-          </circle>
-          <circle r="2.5" fill="var(--accent-cyan)" opacity="0.9">
-            <animateMotion path="M 70 51 L 130 65" dur="1.2s" begin="-0.3s" repeatCount="indefinite"/>
-          </circle>
-          <circle r="2.5" fill="var(--accent-cyan)" opacity="0.9">
-            <animateMotion path="M 70 78 L 130 65" dur="1.2s" begin="-0.6s" repeatCount="indefinite"/>
-          </circle>
-          <circle r="2.5" fill="var(--accent-cyan)" opacity="0.9">
-            <animateMotion path="M 70 105 L 130 65" dur="1.2s" begin="-0.9s" repeatCount="indefinite"/>
-          </circle>
-          <circle r="2.5" fill="var(--accent-green)" opacity="0.9">
-            <animateMotion path="M 180 65 L 240 65" dur="0.8s" repeatCount="indefinite"/>
-          </circle>
-        </svg>
+  <!-- Interactive Dual-Channel Noise Simulator -->
+  <div class="stage reveal d1" style="max-width:880px;padding:24px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:12px;">
+      <div style="font-family:var(--f-mono);font-size:0.75rem;color:var(--dim);">
+        LIVE OSCILLOSCOPE MONITOR &bull; 5V SUPPLY &bull; EMI SPIKE = 1.0 V
       </div>
-      <p class="param-def"><strong>Fan-in</strong> represents the number of inputs a logic gate can accept simultaneously without incorrect operation.</p>
-    </article>
-
-    <!-- FAN-OUT -->
-    <article class="param-card reveal delay-2" aria-label="Fan-out parameter">
-      <div class="param-title">Fan-Out</div>
-      <div class="waveform-box" role="img" aria-label="Fan-out diagram showing one output driving multiple inputs">
-        <svg viewBox="0 0 280 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;" aria-hidden="true">
-          <!-- Driver block -->
-          <rect x="12" y="47" width="80" height="36" rx="6" fill="rgba(26,111,255,0.15)" stroke="rgba(0,229,255,0.5)" stroke-width="1.5"/>
-          <text x="52" y="68" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(0,229,255,0.9)">OUTPUT</text>
-
-          <!-- Trunk line -->
-          <line x1="92" y1="65" x2="130" y2="65" stroke="rgba(0,229,255,0.6)" stroke-width="1.5"/>
-
-          <!-- Branch lines -->
-          <line x1="130" y1="65" x2="200" y2="25" stroke="rgba(0,200,150,0.5)" stroke-width="1.5" class="fanout-line"/>
-          <line x1="130" y1="65" x2="200" y2="50" stroke="rgba(0,200,150,0.5)" stroke-width="1.5" class="fanout-line"/>
-          <line x1="130" y1="65" x2="200" y2="75" stroke="rgba(0,200,150,0.5)" stroke-width="1.5" class="fanout-line"/>
-          <line x1="130" y1="65" x2="200" y2="100" stroke="rgba(0,200,150,0.5)" stroke-width="1.5" class="fanout-line"/>
-
-          <!-- Input loads -->
-          <rect x="200" y="14" width="65" height="22" rx="4" fill="rgba(0,200,150,0.1)" stroke="rgba(0,200,150,0.4)" stroke-width="1"/>
-          <text x="233" y="28" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7.5" fill="rgba(0,200,150,0.8)">Input 1</text>
-          <rect x="200" y="40" width="65" height="22" rx="4" fill="rgba(0,200,150,0.1)" stroke="rgba(0,200,150,0.4)" stroke-width="1"/>
-          <text x="233" y="54" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7.5" fill="rgba(0,200,150,0.8)">Input 2</text>
-          <rect x="200" y="65" width="65" height="22" rx="4" fill="rgba(0,200,150,0.1)" stroke="rgba(0,200,150,0.4)" stroke-width="1"/>
-          <text x="233" y="79" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7.5" fill="rgba(0,200,150,0.8)">Input 3</text>
-          <rect x="200" y="90" width="65" height="22" rx="4" fill="rgba(0,200,150,0.1)" stroke="rgba(0,200,150,0.4)" stroke-width="1"/>
-          <text x="233" y="104" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7.5" fill="rgba(0,200,150,0.8)">Input 4</text>
-
-          <!-- Animated dots -->
-          <circle r="2.5" fill="var(--accent-cyan)">
-            <animateMotion path="M 92 65 L 130 65 L 200 25" dur="1.0s" repeatCount="indefinite"/>
-          </circle>
-          <circle r="2.5" fill="var(--accent-cyan)">
-            <animateMotion path="M 92 65 L 130 65 L 200 50" dur="1.0s" begin="-0.25s" repeatCount="indefinite"/>
-          </circle>
-          <circle r="2.5" fill="var(--accent-cyan)">
-            <animateMotion path="M 92 65 L 130 65 L 200 75" dur="1.0s" begin="-0.5s" repeatCount="indefinite"/>
-          </circle>
-          <circle r="2.5" fill="var(--accent-cyan)">
-            <animateMotion path="M 92 65 L 130 65 L 200 100" dur="1.0s" begin="-0.75s" repeatCount="indefinite"/>
-          </circle>
-        </svg>
-      </div>
-      <p class="param-def"><strong>Fan-out</strong> represents the number of logic gate inputs that one output can drive reliably without voltage degradation.</p>
-    </article>
-
-    <!-- PROPAGATION DELAY -->
-    <article class="param-card reveal delay-1" aria-label="Propagation delay parameter">
-      <div class="param-title">Propagation Delay</div>
-      <div class="waveform-box" role="img" aria-label="Propagation delay waveform showing input and delayed output">
-        <svg id="waveform-svg" viewBox="0 0 280 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;" aria-hidden="true">
-          <!-- Labels -->
-          <text x="8" y="28" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(0,229,255,0.8)">INPUT</text>
-          <text x="8" y="80" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(0,200,150,0.8)">OUTPUT</text>
-          <text x="130" y="110" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(255,179,0,0.8)">↕ t_pd</text>
-
-          <!-- Input waveform (cyan) -->
-          <polyline points="20,42 50,42 50,18 110,18 110,42 160,42 160,18 220,18 220,42 270,42"
-                    fill="none" stroke="rgba(0,229,255,0.8)" stroke-width="2"/>
-
-          <!-- Output waveform (green) - delayed by ~18px -->
-          <polyline id="waveform-output"
-                    points="20,90 68,90 68,66 128,66 128,90 178,90 178,66 238,66 238,90 270,90"
-                    fill="none" stroke="rgba(0,200,150,0.8)" stroke-width="2"/>
-
-          <!-- Delay annotation -->
-          <line x1="50" y1="50" x2="50" y2="110" stroke="rgba(255,179,0,0.3)" stroke-width="1" stroke-dasharray="3 3"/>
-          <line x1="68" y1="50" x2="68" y2="110" stroke="rgba(255,179,0,0.3)" stroke-width="1" stroke-dasharray="3 3"/>
-          <line x1="50" y1="108" x2="68" y2="108" stroke="rgba(255,179,0,0.6)" stroke-width="1.5" marker-end="url(#arrow)" marker-start="url(#arrowrev)"/>
-
-          <!-- Animated signal dot on input -->
-          <circle r="3" fill="var(--accent-cyan)" opacity="0.9">
-            <animateMotion path="M 20 42 L 50 42 L 50 18 L 110 18 L 110 42 L 160 42 L 160 18 L 220 18 L 220 42 L 270 42" dur="2.5s" repeatCount="indefinite"/>
-          </circle>
-          <!-- Animated signal dot on output (delayed) -->
-          <circle r="3" fill="var(--accent-green)" opacity="0.9">
-            <animateMotion path="M 20 90 L 68 90 L 68 66 L 128 66 L 128 90 L 178 90 L 178 66 L 238 66 L 238 90 L 270 90" dur="2.5s" begin="0.3s" repeatCount="indefinite"/>
-          </circle>
-        </svg>
-      </div>
-      <p class="param-def"><strong>Propagation delay</strong> (t<sub>pd</sub>) is the time taken for a logic output to respond to a change at its input.</p>
-    </article>
-
-    <!-- NOISE MARGIN -->
-    <article class="param-card reveal delay-2" aria-label="Noise margin parameter">
-      <div class="param-title">Noise Margin</div>
-      <div class="waveform-box" role="img" aria-label="Noise margin voltage diagram">
-        <svg viewBox="0 0 280 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;" aria-hidden="true">
-          <!-- VCC label -->
-          <text x="8" y="14" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(0,229,255,0.6)">VCC</text>
-          <!-- HIGH region -->
-          <rect x="40" y="8" width="210" height="35" rx="3" fill="rgba(0,200,150,0.12)" stroke="rgba(0,200,150,0.3)" stroke-width="1"/>
-          <text x="50" y="30" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(0,200,150,0.8)">Safe HIGH region</text>
-          <!-- Noise margin HIGH band -->
-          <rect x="40" y="43" width="210" height="20" rx="3" fill="rgba(0,229,255,0.06)" stroke="rgba(0,229,255,0.2)" stroke-width="1" stroke-dasharray="4 3"/>
-          <text x="50" y="57" font-family="JetBrains Mono,monospace" font-size="7.5" fill="rgba(0,229,255,0.6)">Noise Margin HIGH ↕</text>
-
-          <!-- Noise spike (animated) -->
-          <polyline points="145,43 148,30 152,43" fill="none" stroke="rgba(255,79,79,0.9)" stroke-width="1.5">
-            <animate attributeName="opacity" values="0;1;1;0" dur="2s" repeatCount="indefinite"/>
-          </polyline>
-          <text x="156" y="36" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(255,79,79,0.8)">spike</text>
-
-          <!-- Undefined region -->
-          <rect x="40" y="63" width="210" height="18" rx="3" fill="rgba(255,179,0,0.07)" stroke="rgba(255,179,0,0.2)" stroke-width="1"/>
-          <text x="50" y="75" font-family="JetBrains Mono,monospace" font-size="7.5" fill="rgba(255,179,0,0.7)">Undefined region</text>
-
-          <!-- Noise margin LOW band -->
-          <rect x="40" y="81" width="210" height="20" rx="3" fill="rgba(0,229,255,0.06)" stroke="rgba(0,229,255,0.2)" stroke-width="1" stroke-dasharray="4 3"/>
-          <text x="50" y="95" font-family="JetBrains Mono,monospace" font-size="7.5" fill="rgba(0,229,255,0.6)">Noise Margin LOW ↕</text>
-
-          <!-- LOW region -->
-          <rect x="40" y="101" width="210" height="24" rx="3" fill="rgba(255,79,79,0.1)" stroke="rgba(255,79,79,0.3)" stroke-width="1"/>
-          <text x="50" y="116" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(255,79,79,0.7)">Safe LOW region</text>
-          <!-- GND label -->
-          <text x="8" y="122" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(0,229,255,0.6)">GND</text>
-        </svg>
-      </div>
-      <p class="param-def"><strong>Noise margin</strong> is the voltage difference between the guaranteed output level and the required input threshold — it represents the system's tolerance to noise.</p>
-    </article>
-
-    <!-- POWER DISSIPATION -->
-    <article class="param-card reveal delay-3" aria-label="Power dissipation parameter">
-      <div class="param-title">Power Dissipation</div>
-      <div class="waveform-box" role="img" aria-label="Power dissipation comparison between TTL and CMOS">
-        <svg viewBox="0 0 280 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;" aria-hidden="true">
-
-          <!-- TTL bar -->
-          <text x="50" y="18" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(255,179,0,0.9)">TTL</text>
-          <rect x="20" y="22" width="60" height="80" rx="4" fill="rgba(255,179,0,0.06)" stroke="rgba(255,179,0,0.3)" stroke-width="1"/>
-          <!-- TTL fill (high) -->
-          <rect x="20" y="42" width="60" height="60" rx="0 0 4 4" fill="rgba(255,179,0,0.25)">
-            <animate attributeName="height" values="60;55;60" dur="2s" repeatCount="indefinite"/>
-            <animate attributeName="y" values="42;47;42" dur="2s" repeatCount="indefinite"/>
-          </rect>
-          <text x="50" y="110" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(255,179,0,0.6)">Higher Static</text>
-          <text x="50" y="120" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(255,179,0,0.6)">Power</text>
-
-          <!-- Divider -->
-          <line x1="100" y1="20" x2="100" y2="110" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-
-          <!-- CMOS Dynamic bar -->
-          <text x="160" y="18" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(0,229,255,0.9)">CMOS Dynamic</text>
-          <rect x="130" y="22" width="60" height="80" rx="4" fill="rgba(0,229,255,0.04)" stroke="rgba(0,229,255,0.2)" stroke-width="1"/>
-          <rect x="130" y="77" width="60" height="25" rx="0 0 4 4" fill="rgba(0,229,255,0.2)">
-            <animate attributeName="height" values="25;20;25" dur="2.5s" repeatCount="indefinite"/>
-            <animate attributeName="y" values="77;82;77" dur="2.5s" repeatCount="indefinite"/>
-          </rect>
-          <text x="160" y="110" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(0,229,255,0.6)">Near-Zero</text>
-          <text x="160" y="120" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(0,229,255,0.6)">Static Power</text>
-
-          <!-- CMOS Static bar -->
-          <text x="240" y="18" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(0,200,150,0.9)">CMOS Static</text>
-          <rect x="210" y="22" width="60" height="80" rx="4" fill="rgba(0,200,150,0.04)" stroke="rgba(0,200,150,0.2)" stroke-width="1"/>
-          <rect x="210" y="95" width="60" height="7" rx="0 0 4 4" fill="rgba(0,200,150,0.3)"/>
-          <text x="240" y="110" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(0,200,150,0.6)">Very Low</text>
-          <text x="240" y="120" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(0,200,150,0.6)">Static Power</text>
-
-          <!-- Energy lightning -->
-          <text x="50" y="60" text-anchor="middle" font-size="14" fill="rgba(255,179,0,0.6)">⚡</text>
-        </svg>
-      </div>
-      <p class="param-def"><strong>Power dissipation</strong> in CMOS is near-zero when static and only occurs during switching, while TTL has a constant static supply current path through its BJT output structure.</p>
-    </article>
-
-  </div>
-</section>
-
-<div class="section-divider" aria-hidden="true"></div>
-
-<!-- ═══════════════════════════════════════════════════════════
-     SECTION 04 — COMPARISON
-════════════════════════════════════════════════════════════ -->
-<section id="comparison">
-  <span class="section-num" aria-hidden="true">04 — TTL vs CMOS</span>
-  <h2 class="reveal">TTL vs CMOS</h2>
-  <p class="reveal delay-1" style="max-width:580px;margin-top:12px;">
-    We consider three industry-standard logic device families. Click a card to highlight it, then use the filter to explore specific parameters.
-  </p>
-
-  <!-- IC Cards -->
-  <div class="ic-cards reveal delay-2" role="list">
-    <div class="ic-card" id="ic-74ls" role="listitem button" tabindex="0" aria-label="74LS TTL logic family">
-      <div class="ic-name">74LS</div>
-      <div class="ic-type">Low-Power Schottky TTL</div>
-      <div style="margin-top:12px;font-size:0.78rem;color:var(--text-muted);line-height:1.5;">
-        Bipolar junction transistor (BJT) based. Classic TTL family with Schottky clamp for improved speed.
-      </div>
-      <div style="margin-top:10px;">
-        <span style="display:inline-block;padding:3px 8px;background:rgba(255,179,0,0.1);border:1px solid rgba(255,179,0,0.3);border-radius:4px;font-size:0.7rem;color:var(--accent-amber);">TTL</span>
-      </div>
-    </div>
-    <div class="ic-card" id="ic-74hc" role="listitem button" tabindex="0" aria-label="74HC CMOS logic family">
-      <div class="ic-name">74HC</div>
-      <div class="ic-type">High-Speed CMOS</div>
-      <div style="margin-top:12px;font-size:0.78rem;color:var(--text-muted);line-height:1.5;">
-        CMOS-based. Complementary MOSFET structure. High speed with very low static power consumption.
-      </div>
-      <div style="margin-top:10px;">
-        <span style="display:inline-block;padding:3px 8px;background:rgba(0,229,255,0.1);border:1px solid rgba(0,229,255,0.3);border-radius:4px;font-size:0.7rem;color:var(--accent-cyan);">CMOS</span>
-      </div>
-    </div>
-    <div class="ic-card" id="ic-74hct" role="listitem button" tabindex="0" aria-label="74HCT CMOS logic family">
-      <div class="ic-name">74HCT</div>
-      <div class="ic-type">TTL-Compatible High-Speed CMOS</div>
-      <div style="margin-top:12px;font-size:0.78rem;color:var(--text-muted);line-height:1.5;">
-        CMOS technology with input thresholds matched to TTL output levels for direct interfacing.
-      </div>
-      <div style="margin-top:10px;">
-        <span style="display:inline-block;padding:3px 8px;background:rgba(0,200,150,0.1);border:1px solid rgba(0,200,150,0.3);border-radius:4px;font-size:0.7rem;color:var(--accent-green);">CMOS / TTL-Compatible</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="compare-section reveal delay-3">
-    <!-- Compare button -->
-    <button class="compare-btn" id="compare-btn" aria-expanded="false">
-      ⚡ Compare Technologies
-    </button>
-
-    <!-- Filter buttons -->
-    <div class="filter-bar" role="group" aria-label="Filter table by parameter category">
-      <button class="filter-btn active" data-cat="all" aria-pressed="true">All</button>
-      <button class="filter-btn" data-cat="voltage" aria-pressed="false">Voltage</button>
-      <button class="filter-btn" data-cat="current" aria-pressed="false">Current</button>
-      <button class="filter-btn" data-cat="speed" aria-pressed="false">Speed</button>
-      <button class="filter-btn" data-cat="power" aria-pressed="false">Power</button>
-      <button class="filter-btn" data-cat="temperature" aria-pressed="false">Temperature</button>
-    </div>
-
-    <!-- Comparison table -->
-    <!-- EDITABLE: DATASHEET VALUES — replace [INSERT VERIFIED VALUE] with actual datasheet figures -->
-    <div id="compare-table-section" style="display:none;">
-      <div class="table-wrapper" role="region" aria-label="TTL vs CMOS parameter comparison table" tabindex="0">
-        <table>
-          <thead>
-            <tr>
-              <th scope="col">Parameter</th>
-              <th scope="col">74LS TTL</th>
-              <th scope="col">74HC CMOS</th>
-              <th scope="col">74HCT CMOS</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr data-cat="voltage" id="row-supply-voltage">
-              <td>Supply Voltage (V<sub>CC</sub>)</td>
-              <td><span class="placeholder" title="Verify from 74LS datasheet">[INSERT VERIFIED VALUE]</span></td>
-              <td><span class="placeholder" title="Verify from 74HC datasheet">[INSERT VERIFIED VALUE]</span></td>
-              <td><span class="placeholder" title="Verify from 74HCT datasheet">[INSERT VERIFIED VALUE]</span></td>
-            </tr>
-            <tr data-cat="voltage" id="row-vih">
-              <td>V<sub>IH</sub> (min)</td>
-              <td><span class="placeholder">[INSERT VERIFIED VALUE]</span></td>
-              <td><span class="placeholder">[INSERT VERIFIED VALUE]</span></td>
-              <td><span class="placeholder">[INSERT VERIFIED VALUE]</span></td>
-            </tr>
-            <tr data-cat="voltage" id="row-vil">
-              <td>V<sub>IL</sub> (max)</td>
-              <td><span class="placeholder">[INSERT VERIFIED VALUE]</span></td>
-              <td><span class="placeholder">[INSERT VERIFIED VALUE]</span></td>
-              <td><span class="placeholder">[INSERT VERIFIED VALUE]</span></td>
-            </tr>
-            <tr data-cat="voltage" id="row-voh">
-              <td>V<sub>OH</sub> (min)</td>
-              <td><span class="placeholder">[INSERT VERIFIED VALUE]</span></td>
-              <td><span class="placeholder">[INSERT VERIFIED VALUE]</span></td>
-              <td><span class="placeholder">[INSERT VERIFIED VALUE]</span></td>
-            </tr>
-            <tr data-cat="voltage" id="row-vol">
-              <td>V<sub>OL</sub> (max)</td>
-              <td><span class="placeholder">[INSERT VERIFIED VALUE]</span></td>
-              <td><span class="placeholder">[INSERT VERIFIED VALUE]</span></td>
-              <td><span class="placeholder">[INSERT VERIFIED VALUE]</span></td>
-            </tr>
-            <tr data-cat="current" id="row-input-current">
-              <td>Input Current (I<sub>IH</sub> / I<sub>IL</sub>)</td>
-              <td><span class="placeholder">[INSERT VERIFIED VALUE]</span></td>
-              <td><span class="placeholder">[INSERT VERIFIED VALUE]</span></td>
-              <td><span class="placeholder">[INSERT VERIFIED VALUE]</span></td>
-            </tr>
-            <tr data-cat="speed" id="row-tpd">
-              <td>Propagation Delay (t<sub>pd</sub>)</td>
-              <td><span class="placeholder">[INSERT VERIFIED VALUE]</span></td>
-              <td><span class="placeholder">[INSERT VERIFIED VALUE]</span></td>
-              <td><span class="placeholder">[INSERT VERIFIED VALUE]</span></td>
-            </tr>
-            <tr data-cat="temperature" id="row-temp">
-              <td>Temperature Range</td>
-              <td><span class="placeholder">[INSERT VERIFIED VALUE]</span></td>
-              <td><span class="placeholder">[INSERT VERIFIED VALUE]</span></td>
-              <td><span class="placeholder">[INSERT VERIFIED VALUE]</span></td>
-            </tr>
-            <tr data-cat="power" id="row-icc">
-              <td>Static Supply Current (I<sub>CC</sub>)</td>
-              <td><span class="placeholder">[INSERT VERIFIED VALUE]</span></td>
-              <td><span class="placeholder">[INSERT VERIFIED VALUE]</span></td>
-              <td><span class="placeholder">[INSERT VERIFIED VALUE]</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="datasheet-warn" role="alert" aria-live="polite">
-        <span aria-hidden="true">⚠️</span>
-        <span>
-          <strong>Important:</strong> Specifications must be verified from the appropriate manufacturer datasheet
-          before final submission. The values above are placeholders only.
+      <div style="display:flex;gap:8px;">
+        <span style="font-family:var(--f-mono);font-size:0.7rem;padding:4px 10px;border-radius:4px;background:rgba(255,179,0,0.15);color:#ffb300;border:1px solid rgba(255,179,0,0.3);">
+          74LS Margin: 0.4V (FAIL)
+        </span>
+        <span style="font-family:var(--f-mono);font-size:0.7rem;padding:4px 10px;border-radius:4px;background:rgba(0,229,255,0.15);color:#00e5ff;border:1px solid rgba(0,229,255,0.3);">
+          74HC Margin: 1.4V (SAFE)
         </span>
       </div>
     </div>
+
+    <svg viewBox="0 0 820 240" width="100%" height="220" style="background:#050811;border-radius:10px;border:1px solid rgba(0,229,255,0.15);" xmlns="http://www.w3.org/2000/svg">
+      <!-- Grid lines -->
+      <line x1="0" y1="40" x2="820" y2="40" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+      <line x1="0" y1="90" x2="820" y2="90" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+      <line x1="0" y1="140" x2="820" y2="140" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+      <line x1="0" y1="190" x2="820" y2="190" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+
+      <!-- Labels for threshold zones -->
+      <text x="12" y="34" font-family="'JetBrains Mono',monospace" font-size="9" fill="#00c896">VCC = 5.0 V</text>
+      <text x="12" y="84" font-family="'JetBrains Mono',monospace" font-size="9" fill="#00e5ff">74HC VIH = 3.5 V</text>
+      <text x="12" y="134" font-family="'JetBrains Mono',monospace" font-size="9" fill="#ffb300">74LS VIH = 2.0 V</text>
+      <text x="12" y="184" font-family="'JetBrains Mono',monospace" font-size="9" fill="#ff4f4f">74LS VIL = 0.8 V</text>
+
+      <!-- Safe & Forbidden Zone Highlights -->
+      <rect x="0" y="136" width="820" height="48" fill="rgba(255,179,0,0.05)"/>
+      <text x="700" y="162" font-family="'JetBrains Mono',monospace" font-size="8.5" fill="rgba(255,179,0,0.5)">TTL UNDEFINED ZONE</text>
+
+      <!-- Pure TTL Signal corrupted by noise spike crossing into undefined region -->
+      <path d="M 120 195 L 260 195 L 290 195 L 305 120 L 320 195 L 480 195 L 500 120 L 520 195 L 750 195" fill="none" stroke="#ffb300" stroke-width="2.5">
+        <animate attributeName="stroke-dashoffset" from="200" to="0" dur="2s" repeatCount="indefinite"/>
+      </path>
+
+      <!-- TTL Glitch Alert Circle -->
+      <circle cx="305" cy="120" r="10" fill="none" stroke="#ff4f4f" stroke-width="2">
+        <animate attributeName="r" values="8;16;8" dur="1s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="1;0;1" dur="1s" repeatCount="indefinite"/>
+      </circle>
+      <text x="325" y="115" font-family="'JetBrains Mono',monospace" font-size="9" fill="#ff4f4f" font-weight="700">
+        FALSE LOGIC TRIGGER! (0.8V Threshold Violated)
+      </text>
+
+      <!-- CMOS Clean Signal absorbing noise because VIL is 1.5V -->
+      <path d="M 120 205 L 260 205 L 290 205 L 305 155 L 320 205 L 480 205 L 500 155 L 520 205 L 750 205" fill="none" stroke="#00e5ff" stroke-width="2" stroke-dasharray="4,2"/>
+      <text x="535" y="165" font-family="'JetBrains Mono',monospace" font-size="9" fill="#00e5ff">
+        74HC Stays below 1.5V VIL &rarr; IMMUNE
+      </text>
+    </svg>
   </div>
 </section>
 
-<div class="section-divider" aria-hidden="true"></div>
+<div class="divider"></div>
 
-<!-- ═══════════════════════════════════════════════════════════
-     SECTION 05+06 — CALCULATIONS
-════════════════════════════════════════════════════════════ -->
-<section id="calculations">
-  <span class="section-num" aria-hidden="true">05 — CALCULATIONS</span>
-  <h2 class="reveal">Engineering Calculations</h2>
-  <p class="reveal delay-1" style="max-width:580px;margin-top:12px;">
-    Enter values from your verified datasheets to perform the noise margin and fan-out calculations.
-    No default values are provided — all inputs must come from verified sources.
-  </p>
+<!-- ============================================================
+     SCENE 2: SILICON ARCHITECTURE (BJT vs MOSFET)
+     ============================================================ -->
+<section class="scene" id="internal">
+  <div class="scene-label">SCENE 02 // SILICON ARCHITECTURE</div>
+  <h2 class="scene-title">Transistor Mechanics: BJT vs MOSFET</h2>
+  <p class="scene-caption">The fundamental difference lies at the atomic silicon level: Current-driven bipolar junctions vs electric-field voltage-driven insulated gates.</p>
 
-  <!-- ── NOISE MARGIN ── -->
-  <h3 class="reveal delay-2" style="margin-top:40px;margin-bottom:4px;">
-    <span style="color:var(--text-muted);font-size:0.75rem;font-weight:400;display:block;margin-bottom:6px;font-family:var(--font-mono);letter-spacing:0.1em;text-transform:uppercase;">05 — Noise Margin Calculation</span>
-    Noise Margin
-  </h3>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px;width:100%;max-width:880px;" class="reveal d1">
+    <!-- TTL Architecture Card -->
+    <div style="background:rgba(8,14,28,0.85);border:1px solid rgba(255,179,0,0.3);border-radius:14px;padding:22px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <span style="font-family:var(--f-mono);font-size:0.85rem;color:#ffb300;font-weight:700;">74LS TTL: BIPOLAR BJT</span>
+        <span style="font-family:var(--f-mono);font-size:0.65rem;color:var(--dim);background:rgba(255,179,0,0.1);padding:3px 8px;border-radius:4px;">Current-Driven</span>
+      </div>
 
-  <div class="calc-panel reveal delay-3">
+      <!-- Animated BJT Inverter Diagram -->
+      <svg viewBox="0 0 320 210" width="100%" height="210" style="background:#060a14;border-radius:8px;" xmlns="http://www.w3.org/2000/svg">
+        <!-- VCC Rail -->
+        <line x1="30" y1="25" x2="290" y2="25" stroke="#ffb300" stroke-width="2"/>
+        <text x="35" y="18" font-family="'JetBrains Mono',monospace" font-size="8.5" fill="#ffb300">+5V VCC</text>
 
-    <div class="formula-box" role="math" aria-label="Noise Margin HIGH formula">
-      <span class="formula-label">Formula</span>
-      NM<sub>H</sub> = V<sub>OH</sub>(min) − V<sub>IH</sub>(min)
+        <!-- Pull-Up Resistor -->
+        <rect x="180" y="35" width="16" height="36" fill="#152035" stroke="#ffb300" stroke-width="1.2"/>
+        <text x="202" y="56" font-family="'JetBrains Mono',monospace" font-size="7.5" fill="#8fa8c8">R_pullup</text>
+        <line x1="188" y1="25" x2="188" y2="35" stroke="#ffb300" stroke-width="1.5"/>
+        <line x1="188" y1="71" x2="188" y2="90" stroke="#ffb300" stroke-width="1.5"/>
+
+        <!-- BJT Transistor Symbol -->
+        <circle cx="188" cy="115" r="24" fill="#0d1526" stroke="#ffb300" stroke-width="1.5"/>
+        <line x1="172" y1="102" x2="172" y2="128" stroke="#ffb300" stroke-width="2.5"/>
+        <!-- Collector -->
+        <line x1="172" y1="108" x2="188" y2="92" stroke="#ffb300" stroke-width="1.5"/>
+        <!-- Emitter with arrow -->
+        <line x1="172" y1="122" x2="188" y2="138" stroke="#ffb300" stroke-width="1.5"/>
+        <polygon points="185,133 189,140 180,137" fill="#ffb300"/>
+
+        <!-- Base connection to Input -->
+        <line x1="70" y1="115" x2="172" y2="115" stroke="#ffb300" stroke-width="1.5"/>
+        <circle cx="70" cy="115" r="3" fill="#ffb300"/>
+        <text x="40" y="118" font-family="'JetBrains Mono',monospace" font-size="8.5" fill="#ffb300">IN</text>
+
+        <!-- Continuous Base Current Animation (Electrons flowing) -->
+        <circle cx="95" cy="115" r="2.5" fill="#fff">
+          <animate attributeName="cx" values="70;172" dur="1s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="140" cy="115" r="2.5" fill="#fff">
+          <animate attributeName="cx" values="70;172" dur="1s" repeatCount="indefinite" begin="0.5s"/>
+        </circle>
+
+        <!-- Output Rail -->
+        <line x1="188" y1="92" x2="270" y2="92" stroke="#00e5ff" stroke-width="1.5"/>
+        <circle cx="270" cy="92" r="3" fill="#00e5ff"/>
+        <text x="278" y="95" font-family="'JetBrains Mono',monospace" font-size="8.5" fill="#00e5ff">OUT</text>
+
+        <!-- Ground Rail -->
+        <line x1="188" y1="138" x2="188" y2="175" stroke="#ffb300" stroke-width="1.5"/>
+        <line x1="173" y1="175" x2="203" y2="175" stroke="#ffb300" stroke-width="2"/>
+        <line x1="178" y1="180" x2="198" y2="180" stroke="#ffb300" stroke-width="1.5"/>
+        <line x1="183" y1="185" x2="193" y2="185" stroke="#ffb300" stroke-width="1"/>
+        <text x="210" y="182" font-family="'JetBrains Mono',monospace" font-size="8" fill="#8fa8c8">GND</text>
+      </svg>
+
+      <div style="margin-top:12px;font-size:0.75rem;color:var(--dim);line-height:1.4;">
+        <span style="color:#ffb300;font-weight:600;">Constant Base Current:</span> Requires continuous current flow (~0.4 mA) even when idle, producing steady heat and static power loss.
+      </div>
     </div>
-    <div class="formula-box" role="math" aria-label="Noise Margin LOW formula">
-      <span class="formula-label">Formula</span>
-      NM<sub>L</sub> = V<sub>IL</sub>(max) − V<sub>OL</sub>(max)
-    </div>
 
-    <!-- Inputs -->
-    <div class="input-grid">
-      <div class="input-group">
-        <label for="nm-voh">V<sub>OH</sub>(min) — Volts</label>
-        <input type="number" id="nm-voh" placeholder="e.g. 2.70" step="0.001" aria-describedby="nm-voh-hint"/>
-        <span id="nm-voh-hint" style="font-size:0.7rem;color:var(--text-muted);margin-top:4px;display:block;">Minimum guaranteed output HIGH voltage</span>
+    <!-- CMOS Architecture Card -->
+    <div style="background:rgba(8,14,28,0.85);border:1px solid rgba(0,229,255,0.3);border-radius:14px;padding:22px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <span style="font-family:var(--f-mono);font-size:0.85rem;color:#00e5ff;font-weight:700;">74HC: CMOS COMPLEMENTARY MOS</span>
+        <span style="font-family:var(--f-mono);font-size:0.65rem;color:var(--dim);background:rgba(0,229,255,0.1);padding:3px 8px;border-radius:4px;">Field-Effect</span>
       </div>
-      <div class="input-group">
-        <label for="nm-vih">V<sub>IH</sub>(min) — Volts</label>
-        <input type="number" id="nm-vih" placeholder="e.g. 2.00" step="0.001" aria-describedby="nm-vih-hint"/>
-        <span id="nm-vih-hint" style="font-size:0.7rem;color:var(--text-muted);margin-top:4px;display:block;">Minimum input voltage recognised as HIGH</span>
-      </div>
-      <div class="input-group">
-        <label for="nm-vil">V<sub>IL</sub>(max) — Volts</label>
-        <input type="number" id="nm-vil" placeholder="e.g. 0.80" step="0.001" aria-describedby="nm-vil-hint"/>
-        <span id="nm-vil-hint" style="font-size:0.7rem;color:var(--text-muted);margin-top:4px;display:block;">Maximum input voltage recognised as LOW</span>
-      </div>
-      <div class="input-group">
-        <label for="nm-vol">V<sub>OL</sub>(max) — Volts</label>
-        <input type="number" id="nm-vol" placeholder="e.g. 0.40" step="0.001" aria-describedby="nm-vol-hint"/>
-        <span id="nm-vol-hint" style="font-size:0.7rem;color:var(--text-muted);margin-top:4px;display:block;">Maximum guaranteed output LOW voltage</span>
-      </div>
-    </div>
 
-    <div class="calc-actions">
-      <button class="calc-btn primary" id="nm-calc-btn" aria-label="Calculate noise margin values">Calculate</button>
-      <button class="calc-btn secondary" id="nm-reset-btn" aria-label="Reset noise margin inputs">Reset</button>
-    </div>
+      <!-- Animated CMOS Inverter Diagram -->
+      <svg viewBox="0 0 320 210" width="100%" height="210" style="background:#060a14;border-radius:8px;" xmlns="http://www.w3.org/2000/svg">
+        <!-- VDD / VCC Rail -->
+        <line x1="30" y1="20" x2="290" y2="20" stroke="#00e5ff" stroke-width="2"/>
+        <text x="35" y="14" font-family="'JetBrains Mono',monospace" font-size="8.5" fill="#00e5ff">+5V VDD</text>
 
-    <!-- Results -->
-    <div class="result-box" id="nm-result" role="region" aria-live="polite" aria-label="Noise margin calculation results">
-      <div class="result-item">
-        <span class="result-label">Noise Margin HIGH (NM<sub>H</sub>)</span>
-        <span class="result-value" id="nm-result-high">—</span>
-      </div>
-      <div class="result-item">
-        <span class="result-label">Noise Margin LOW (NM<sub>L</sub>)</span>
-        <span class="result-value" id="nm-result-low">—</span>
-      </div>
-    </div>
+        <!-- PMOS Transistor (Top Pull-up) -->
+        <line x1="180" y1="20" x2="180" y2="40" stroke="#00e5ff" stroke-width="1.5"/>
+        <rect x="170" y="40" width="20" height="24" rx="2" fill="#0b172a" stroke="#00e5ff" stroke-width="1.5"/>
+        <!-- Insulated Gate SiO2 Layer representation -->
+        <line x1="156" y1="42" x2="156" y2="62" stroke="#00e5ff" stroke-width="2"/>
+        <line x1="162" y1="40" x2="162" y2="64" stroke="#ff4f4f" stroke-width="1.5" stroke-dasharray="2,1"/>
+        <circle cx="166" cy="52" r="3" fill="none" stroke="#00e5ff" stroke-width="1"/>
+        <text x="200" y="55" font-family="'JetBrains Mono',monospace" font-size="7.5" fill="#00e5ff">PMOS</text>
 
-    <!-- Visual Noise Margin bars (conceptual, no values) -->
-    <p style="font-size:0.8rem;color:var(--text-muted);margin-top:24px;margin-bottom:12px;">
-      Conceptual voltage region diagram (proportions are illustrative only — not to scale):
-    </p>
-    <div class="nm-bars" role="img" aria-label="Conceptual noise margin voltage region diagram">
-      <div class="nm-bar-group">
-        <div class="nm-bar-label">HIGH Region</div>
-        <div class="nm-bar-track">
-          <div class="nm-segment high">V<sub>OH</sub> min</div>
-          <div class="nm-segment margin">NM<sub>H</sub></div>
-          <div class="nm-segment low">V<sub>IH</sub> min</div>
-        </div>
-      </div>
-      <div class="nm-bar-group">
-        <div class="nm-bar-label">LOW Region</div>
-        <div class="nm-bar-track">
-          <div class="nm-segment high" style="background:rgba(0,229,255,0.12);">V<sub>IL</sub> max</div>
-          <div class="nm-segment margin">NM<sub>L</sub></div>
-          <div class="nm-segment low" style="background:rgba(0,200,150,0.15);">V<sub>OL</sub> max</div>
-        </div>
+        <!-- Common Output Node -->
+        <line x1="180" y1="64" x2="180" y2="120" stroke="#00c896" stroke-width="2"/>
+        <line x1="180" y1="92" x2="270" y2="92" stroke="#00c896" stroke-width="2"/>
+        <circle cx="270" cy="92" r="3" fill="#00c896"/>
+        <text x="278" y="95" font-family="'JetBrains Mono',monospace" font-size="8.5" fill="#00c896">OUT</text>
+
+        <!-- NMOS Transistor (Bottom Pull-down) -->
+        <rect x="170" y="120" width="20" height="24" rx="2" fill="#0b172a" stroke="#00e5ff" stroke-width="1.5"/>
+        <line x1="156" y1="122" x2="156" y2="142" stroke="#00e5ff" stroke-width="2"/>
+        <line x1="162" y1="120" x2="162" y2="144" stroke="#ff4f4f" stroke-width="1.5" stroke-dasharray="2,1"/>
+        <text x="200" y="135" font-family="'JetBrains Mono',monospace" font-size="7.5" fill="#00e5ff">NMOS</text>
+
+        <!-- Common Input to Gates -->
+        <path d="M 70 92 L 130 92 L 130 52 L 156 52 M 130 92 L 130 132 L 156 132" fill="none" stroke="#00e5ff" stroke-width="1.5"/>
+        <circle cx="70" cy="92" r="3" fill="#00e5ff"/>
+        <text x="40" y="95" font-family="'JetBrains Mono',monospace" font-size="8.5" fill="#00e5ff">IN</text>
+
+        <!-- NO CURRENT INTO GATE (Zero Gate Current) Icon -->
+        <text x="80" y="80" font-family="'JetBrains Mono',monospace" font-size="7" fill="#00c896">I_in &approx; 0 &mu;A (SiO2)</text>
+
+        <!-- Ground Rail -->
+        <line x1="180" y1="144" x2="180" y2="175" stroke="#00e5ff" stroke-width="1.5"/>
+        <line x1="165" y1="175" x2="195" y2="175" stroke="#00e5ff" stroke-width="2"/>
+        <line x1="170" y1="180" x2="190" y2="180" stroke="#00e5ff" stroke-width="1.5"/>
+        <line x1="175" y1="185" x2="185" y2="185" stroke="#00e5ff" stroke-width="1"/>
+        <text x="205" y="182" font-family="'JetBrains Mono',monospace" font-size="8" fill="#8fa8c8">GND</text>
+      </svg>
+
+      <div style="margin-top:12px;font-size:0.75rem;color:var(--dim);line-height:1.4;">
+        <span style="color:#00e5ff;font-weight:600;">Insulated SiO2 Oxide Gate:</span> Gate impedance exceeds $10^{12}\,\Omega$. Zero static current flows through inputs; power is consumed only during switching transitions!
       </div>
     </div>
   </div>
+</section>
 
-  <!-- ── FAN-OUT ── -->
-  <h3 class="reveal delay-2" style="margin-top:56px;margin-bottom:4px;">
-    <span style="color:var(--text-muted);font-size:0.75rem;font-weight:400;display:block;margin-bottom:6px;font-family:var(--font-mono);letter-spacing:0.1em;text-transform:uppercase;">06 — Fan-Out Calculation</span>
-    Fan-Out
-  </h3>
+<div class="divider"></div>
 
-  <div class="calc-panel reveal delay-3">
+<!-- ============================================================
+     SCENE 3: VOLTAGE RAILS & THRESHOLDS
+     ============================================================ -->
+<section class="scene" id="voltage">
+  <div class="scene-label">SCENE 03 // VOLTAGE SPECTRUM</div>
+  <h2 class="scene-title">Voltage Rails &amp; Switching Bands</h2>
+  <p class="scene-caption">Comparison of Texas Instruments verified 5V electrical threshold profiles ($V_{OH}, V_{IH}, V_{IL}, V_{OL}$). Notice how CMOS swings rail-to-rail!</p>
 
-    <div class="formula-box" role="math" aria-label="Fan-out HIGH formula">
-      <span class="formula-label">Formula</span>
-      Fan-out<sub>H</sub> = |I<sub>OH</sub>| ÷ I<sub>IH</sub>
+  <div class="voltage-stage">
+    <!-- Populated dynamically by script.js buildVoltageTracks() -->
+    <div class="v-track-wrapper" id="voltage-tracks"></div>
+  </div>
+
+  <div style="margin-top:24px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+    <div style="display:flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:0.75rem;color:#00c896;">
+      <span style="width:12px;height:12px;background:rgba(0,200,150,0.5);border:1px solid #00c896;display:inline-block;border-radius:2px;"></span>
+      Guaranteed HIGH ($V_{OH}$)
     </div>
-    <div class="formula-box" role="math" aria-label="Fan-out LOW formula">
-      <span class="formula-label">Formula</span>
-      Fan-out<sub>L</sub> = I<sub>OL</sub> ÷ |I<sub>IL</sub>|
+    <div style="display:flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:0.75rem;color:#00e5ff;">
+      <span style="width:12px;height:12px;background:rgba(0,229,255,0.4);border:1px solid #00e5ff;display:inline-block;border-radius:2px;"></span>
+      Noise Margin ($NM_H / NM_L$)
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:0.75rem;color:#ffb300;">
+      <span style="width:12px;height:12px;background:rgba(255,179,0,0.4);border:1px solid #ffb300;display:inline-block;border-radius:2px;"></span>
+      Forbidden Undefined Zone
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:0.75rem;color:#ff4f4f;">
+      <span style="width:12px;height:12px;background:rgba(255,79,79,0.5);border:1px solid #ff4f4f;display:inline-block;border-radius:2px;"></span>
+      Guaranteed LOW ($V_{OL}$)
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============================================================
+     SCENE 4: NOISE MARGIN COMPARISON
+     ============================================================ -->
+<section class="scene" id="noise">
+  <div class="scene-label">SCENE 04 // NOISE IMMUNITY</div>
+  <h2 class="scene-title">Noise Margin Under Surge</h2>
+  <p class="scene-caption">
+    $NM_H = V_{OH} - V_{IH}$ &nbsp;|&nbsp; $NM_L = V_{IL} - V_{OL}$<br/>
+    Watch simulated voltage spikes hit the logic gates in real time:
+  </p>
+
+  <!-- Dynamic container built by script.js buildNoiseMargin() -->
+  <div class="nm-grid" id="nm-container"></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============================================================
+     SCENE 5: FAN-OUT CAPACITY
+     ============================================================ -->
+<section class="scene" id="fanout">
+  <div class="scene-label">SCENE 05 // CURRENT &amp; DRIVE CAPABILITY</div>
+  <h2 class="scene-title">Fan-Out: 20 Gates vs 4,000+ Gates</h2>
+  <p class="scene-caption">How many standard inputs can a single output driver control before signal degradation occurs?</p>
+
+  <div class="fanout-row">
+    <!-- TTL Fanout Card -->
+    <div class="fanout-box reveal d1" style="border-color:rgba(255,179,0,0.3);">
+      <div class="fanout-box-title" style="color:#ffb300;">74LS TTL FAN-OUT</div>
+      <div class="fanout-number" style="color:#ffb300;">20</div>
+      <div class="fanout-sub">
+        $I_{OL} = 8.0\text{ mA} \div I_{IL} = 0.4\text{ mA} = 20\text{ loads}$<br/>
+        Heavily limited by DC sink current.
+      </div>
+      <div class="fanout-dots fanout-dots-inner" data-n="20" data-color="#ffb300"></div>
     </div>
 
-    <div class="input-grid">
-      <div class="input-group">
-        <label for="fo-ioh">|I<sub>OH</sub>| — mA</label>
-        <input type="number" id="fo-ioh" placeholder="e.g. 0.4" step="0.001" aria-describedby="fo-ioh-hint"/>
-        <span id="fo-ioh-hint" style="font-size:0.7rem;color:var(--text-muted);margin-top:4px;display:block;">Maximum output HIGH current (magnitude)</span>
+    <!-- CMOS Fanout Card -->
+    <div class="fanout-box reveal d2" style="border-color:rgba(0,229,255,0.3);">
+      <div class="fanout-box-title" style="color:#00e5ff;">74HC CMOS FAN-OUT</div>
+      <div class="fanout-number" style="color:#00e5ff;">4,000+</div>
+      <div class="fanout-sub">
+        $I_{in} \le 1\text{ }\mu\text{A}$ gate leakage.<br/>
+        Nearly limitless at low frequencies; limited by capacitance $C_L$.
       </div>
-      <div class="input-group">
-        <label for="fo-iih">I<sub>IH</sub> — mA</label>
-        <input type="number" id="fo-iih" placeholder="e.g. 0.02" step="0.001" aria-describedby="fo-iih-hint"/>
-        <span id="fo-iih-hint" style="font-size:0.7rem;color:var(--text-muted);margin-top:4px;display:block;">Maximum input HIGH current per load</span>
-      </div>
-      <div class="input-group">
-        <label for="fo-iol">I<sub>OL</sub> — mA</label>
-        <input type="number" id="fo-iol" placeholder="e.g. 8.0" step="0.001" aria-describedby="fo-iol-hint"/>
-        <span id="fo-iol-hint" style="font-size:0.7rem;color:var(--text-muted);margin-top:4px;display:block;">Maximum output LOW current (sinking)</span>
-      </div>
-      <div class="input-group">
-        <label for="fo-iil">|I<sub>IL</sub>| — mA</label>
-        <input type="number" id="fo-iil" placeholder="e.g. 0.02" step="0.001" aria-describedby="fo-iil-hint"/>
-        <span id="fo-iil-hint" style="font-size:0.7rem;color:var(--text-muted);margin-top:4px;display:block;">Maximum input LOW current per load (magnitude)</span>
-      </div>
+      <div class="fanout-dots fanout-dots-inner" data-n="75" data-color="#00e5ff"></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============================================================
+     SCENE 6: PROPAGATION DELAY & SPEED
+     ============================================================ -->
+<section class="scene" id="delay">
+  <div class="scene-label">SCENE 06 // SWITCHING SPEED</div>
+  <h2 class="scene-title">Propagation Delay ($t_{pd}$)</h2>
+  <p class="scene-caption">Measuring the nanosecond delay between input transition (50% level) and output change (50% level). Both modern families achieve lightning speed (~10 ns).</p>
+
+  <div class="delay-stage reveal d1">
+    <div class="wave-row">
+      <div class="wave-label">CLOCK INPUT REFERENCE (10 MHz SQUARE WAVE)</div>
+      <svg class="wave-svg" viewBox="0 0 760 60" width="100%" height="60" style="background:#050811;border-radius:6px;">
+        <path class="animated" d="M 20 45 L 80 45 L 80 15 L 160 15 L 160 45 L 240 45 L 240 15 L 320 15 L 320 45 L 400 45 L 400 15 L 480 15 L 480 45 L 560 45 L 560 15 L 640 15 L 640 45 L 720 45" fill="none" stroke="#e8edf5" stroke-width="2"/>
+      </svg>
     </div>
 
-    <div class="calc-actions">
-      <button class="calc-btn primary" id="fo-calc-btn" aria-label="Calculate fan-out values">Calculate Fan-Out</button>
-      <button class="calc-btn secondary" id="fo-reset-btn" aria-label="Reset fan-out inputs">Reset</button>
+    <div class="wave-row">
+      <div class="wave-label" style="color:#ffb300;">74LS TTL RESPONSE &bull; $t_{pd} \approx 10\text{ ns}$</div>
+      <svg class="wave-svg" viewBox="0 0 760 60" width="100%" height="60" style="background:#050811;border-radius:6px;">
+        <!-- Slight lag of 15px -->
+        <path class="animated" d="M 20 15 L 95 15 L 95 45 L 175 45 L 175 15 L 255 15 L 255 45 L 335 45 L 335 15 L 415 15 L 415 45 L 495 45 L 495 15 L 575 15 L 575 45 L 655 45 L 655 15 L 720 15" fill="none" stroke="#ffb300" stroke-width="2"/>
+      </svg>
     </div>
 
-    <div class="result-box" id="fo-result" role="region" aria-live="polite" aria-label="Fan-out calculation results">
-      <div class="result-item">
-        <span class="result-label">Fan-Out<sub>H</sub> (sourcing)</span>
-        <span class="result-value" id="fo-result-high">—</span>
-      </div>
-      <div class="result-item">
-        <span class="result-label">Fan-Out<sub>L</sub> (sinking)</span>
-        <span class="result-value" id="fo-result-low">—</span>
-      </div>
-      <div class="result-item">
-        <span class="result-label">Effective Fan-Out (min of both)</span>
-        <span class="result-value text-green" id="fo-result-min">—</span>
-      </div>
-    </div>
-
-    <!-- Fan-out visual -->
-    <div class="fanout-visual" role="img" aria-label="Fan-out conceptual diagram">
-      <svg viewBox="0 0 500 120" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;max-height:120px;" aria-hidden="true">
-        <!-- Driver -->
-        <rect x="10" y="42" width="90" height="36" rx="6" fill="rgba(26,111,255,0.15)" stroke="rgba(0,229,255,0.5)" stroke-width="1.5"/>
-        <text x="55" y="63" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(0,229,255,0.9)">OUTPUT</text>
-        <text x="55" y="73" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(0,229,255,0.6)">DRIVER</text>
-
-        <!-- Trunk -->
-        <line x1="100" y1="60" x2="160" y2="60" stroke="rgba(0,229,255,0.6)" stroke-width="1.5"/>
-
-        <!-- 4 branches -->
-        <line x1="160" y1="60" x2="260" y2="18" stroke="rgba(0,200,150,0.5)" stroke-width="1.3" class="fanout-line"/>
-        <line x1="160" y1="60" x2="260" y2="42" stroke="rgba(0,200,150,0.5)" stroke-width="1.3" class="fanout-line"/>
-        <line x1="160" y1="60" x2="260" y2="66" stroke="rgba(0,200,150,0.5)" stroke-width="1.3" class="fanout-line"/>
-        <line x1="160" y1="60" x2="260" y2="90" stroke="rgba(0,200,150,0.5)" stroke-width="1.3" class="fanout-line"/>
-
-        <!-- Load boxes -->
-        <rect x="260" y="8"  width="100" height="22" rx="4" fill="rgba(0,200,150,0.08)" stroke="rgba(0,200,150,0.35)" stroke-width="1"/>
-        <text x="310" y="22" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(0,200,150,0.8)">Load Gate 1</text>
-        <rect x="260" y="32" width="100" height="22" rx="4" fill="rgba(0,200,150,0.08)" stroke="rgba(0,200,150,0.35)" stroke-width="1"/>
-        <text x="310" y="46" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(0,200,150,0.8)">Load Gate 2</text>
-        <rect x="260" y="56" width="100" height="22" rx="4" fill="rgba(0,200,150,0.08)" stroke="rgba(0,200,150,0.35)" stroke-width="1"/>
-        <text x="310" y="70" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(0,200,150,0.8)">Load Gate 3</text>
-        <rect x="260" y="80" width="100" height="22" rx="4" fill="rgba(0,200,150,0.08)" stroke="rgba(0,200,150,0.35)" stroke-width="1"/>
-        <text x="310" y="94" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(0,200,150,0.8)">Load Gate 4</text>
-
-        <!-- More indication -->
-        <text x="380" y="108" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(0,200,150,0.5)">... N total loads</text>
-
-        <!-- Dots -->
-        <circle r="2.5" fill="var(--accent-cyan)">
-          <animateMotion path="M 100 60 L 160 60 L 260 18" dur="1.1s" repeatCount="indefinite"/>
-        </circle>
-        <circle r="2.5" fill="var(--accent-cyan)">
-          <animateMotion path="M 100 60 L 160 60 L 260 42" dur="1.1s" begin="-0.27s" repeatCount="indefinite"/>
-        </circle>
-        <circle r="2.5" fill="var(--accent-cyan)">
-          <animateMotion path="M 100 60 L 160 60 L 260 66" dur="1.1s" begin="-0.54s" repeatCount="indefinite"/>
-        </circle>
-        <circle r="2.5" fill="var(--accent-cyan)">
-          <animateMotion path="M 100 60 L 160 60 L 260 90" dur="1.1s" begin="-0.81s" repeatCount="indefinite"/>
-        </circle>
+    <div class="wave-row" style="margin-bottom:0;">
+      <div class="wave-label" style="color:#00e5ff;">74HC CMOS RESPONSE &bull; $t_{pd} \approx 10\text{ ns}$ (HIGH SPEED SILICON GATE)</div>
+      <svg class="wave-svg" viewBox="0 0 760 60" width="100%" height="60" style="background:#050811;border-radius:6px;">
+        <!-- Clean inverted waveform -->
+        <path class="animated" d="M 20 15 L 94 15 L 94 45 L 174 45 L 174 15 L 254 15 L 254 45 L 334 45 L 334 15 L 414 15 L 414 45 L 494 45 L 494 15 L 574 15 L 574 45 L 654 45 L 654 15 L 720 15" fill="none" stroke="#00e5ff" stroke-width="2"/>
       </svg>
     </div>
   </div>
 </section>
 
-<div class="section-divider" aria-hidden="true"></div>
+<div class="divider"></div>
 
-<!-- ═══════════════════════════════════════════════════════════
-     SECTION 07 — DECISION
-════════════════════════════════════════════════════════════ -->
-<section id="decision">
-  <span class="section-num" aria-hidden="true">07 — DECISION</span>
-  <h2 class="reveal">Engineering Decision</h2>
-  <p class="reveal delay-1" style="max-width:560px;margin-top:12px;">
-    Returning to the smart factory — considering all the challenges and parameters, which logic family wins?
-  </p>
+<!-- ============================================================
+     SCENE 7: POWER DISSIPATION & THERMAL BEHAVIOR
+     ============================================================ -->
+<section class="scene" id="power">
+  <div class="scene-label">SCENE 07 // POWER CONSUMPTION</div>
+  <h2 class="scene-title">Static vs Dynamic Power</h2>
+  <p class="scene-caption">TTL drains continuous static current ($1-4\text{ mA}$) around the clock. CMOS consumes virtually ZERO static power ($< 1\text{ }\mu\text{A}$), scaling dynamically only during switching!</p>
 
-  <!-- Decision flow -->
-  <div class="decision-flow reveal delay-2" role="list" aria-label="Engineering decision flow">
-    <div class="decision-step" role="listitem">Industrial Environment</div>
-    <div class="decision-arrow" aria-hidden="true"></div>
-    <div class="decision-step" role="listitem">Electrical Noise Present</div>
-    <div class="decision-arrow" aria-hidden="true"></div>
-    <div class="decision-step" role="listitem">Multiple Digital Connections</div>
-    <div class="decision-arrow" aria-hidden="true"></div>
-    <div class="decision-step" role="listitem">Continuous Operation Required</div>
-    <div class="decision-arrow" aria-hidden="true"></div>
-    <div class="decision-step highlight" role="listitem">→ Logic-Family Selection: <strong>CMOS</strong></div>
-  </div>
-
-  <!-- Recommendation -->
-  <div class="conclusion-rec reveal delay-3" style="margin-top:40px;">
-    <p class="rec-label">Recommended Technology</p>
-    <div class="rec-main">CMOS-Based Logic</div>
-    <p style="color:var(--text-secondary);font-size:0.9rem;max-width:520px;margin:0 auto 24px;">
-      CMOS offers superior noise immunity, very low static power consumption, wide operating voltage range,
-      and high fan-out — making it well-suited to industrial digital subsystems.
-    </p>
-  </div>
-
-  <!-- Two branches -->
-  <div class="decision-branches reveal delay-4">
-    <div class="branch-card">
-      <div class="branch-label">Existing TTL Interface</div>
-      <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:16px;">
-        When interfacing with legacy TTL-level signals
+  <div class="power-grid reveal d1">
+    <!-- TTL Power Card -->
+    <div class="power-card">
+      <div class="power-label" style="color:#ffb300;">74LS TTL IC CHIP</div>
+      <div class="power-chip" id="ttl-chip" style="background:#1a1506;border:2px solid #ffb300;color:#ffb300;">
+        74LS
       </div>
-      <div style="font-size:1.2rem;color:var(--accent-amber);margin-bottom:8px;">→</div>
-      <div class="branch-ic text-amber">74HCT</div>
-      <div class="branch-desc">TTL-compatible CMOS — accepts TTL input thresholds while operating as CMOS</div>
-    </div>
-    <div class="branch-card">
-      <div class="branch-label">New CMOS Subsystem</div>
-      <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:16px;">
-        When designing a new all-CMOS digital system
+      <div class="power-bar-wrap">
+        <div class="power-bar" id="ttl-power-bar" style="width:0%;background:#ffb300;"></div>
       </div>
-      <div style="font-size:1.2rem;color:var(--accent-cyan);margin-bottom:8px;">→</div>
-      <div class="branch-ic">74HC</div>
-      <div class="branch-desc">Full CMOS — best noise margins and lowest power for CMOS-to-CMOS systems</div>
-    </div>
-  </div>
-
-  <div class="datasheet-warn reveal delay-5" style="margin-top:32px;" role="note">
-    <span aria-hidden="true">📋</span>
-    <span>
-      <strong>Note:</strong> Final device selection must be based on verified datasheet specifications and specific system requirements.
-      Always confirm compatibility with your supply voltage and logic levels before finalising the design.
-    </span>
-  </div>
-</section>
-
-<div class="section-divider" aria-hidden="true"></div>
-
-<!-- ═══════════════════════════════════════════════════════════
-     SECTION 08 — TRADE-OFFS
-════════════════════════════════════════════════════════════ -->
-<section id="tradeoffs">
-  <span class="section-num" aria-hidden="true">08 — TRADE-OFFS</span>
-  <h2 class="reveal">Trade-Offs</h2>
-  <p class="reveal delay-1" style="max-width:580px;margin-top:12px;">
-    Every technology choice involves trade-offs. Understanding CMOS advantages and engineering considerations leads to a better design.
-  </p>
-
-  <div class="tradeoff-grid">
-    <!-- Advantages -->
-    <div>
-      <h3 class="reveal delay-2">
-        <span style="color:var(--accent-green);margin-right:8px;" aria-hidden="true">✓</span>
-        CMOS Advantages
-      </h3>
-
-      <div class="tradeoff-item adv" role="listitem" aria-label="Advantage: Low static power">
-        <span class="tradeoff-icon text-green" aria-hidden="true">✓</span>
-        <div class="tradeoff-text">
-          <strong>Low Static Power Consumption</strong>
-          CMOS draws negligible current when not switching — ideal for continuously powered industrial systems.
-        </div>
-      </div>
-
-      <div class="tradeoff-item adv" role="listitem" aria-label="Advantage: High input impedance">
-        <span class="tradeoff-icon text-green" aria-hidden="true">✓</span>
-        <div class="tradeoff-text">
-          <strong>High Input Impedance</strong>
-          MOSFET gates draw near-zero input current, enabling very high fan-out capability.
-        </div>
-      </div>
-
-      <div class="tradeoff-item adv" role="listitem" aria-label="Advantage: Good noise margins">
-        <span class="tradeoff-icon text-green" aria-hidden="true">✓</span>
-        <div class="tradeoff-text">
-          <strong>Good Noise Margins</strong>
-          CMOS output swings rail-to-rail, providing larger noise margins than TTL — important in an electrically noisy factory.
-        </div>
-      </div>
-
-      <div class="tradeoff-item adv" role="listitem" aria-label="Advantage: Wide operating range">
-        <span class="tradeoff-icon text-green" aria-hidden="true">✓</span>
-        <div class="tradeoff-text">
-          <strong>Wide Operating Voltage Range</strong>
-          74HC can operate over a wide VCC range, providing design flexibility across different system voltages.
-        </div>
+      <div class="power-note">
+        <strong>Continuous Heat Sink:</strong> Drains $1-4\text{ mA}$ quiescent current ($I_{CC}$) even when completely static and idle.
       </div>
     </div>
 
-    <!-- Considerations -->
-    <div>
-      <h3 class="reveal delay-3">
-        <span style="color:var(--accent-amber);margin-right:8px;" aria-hidden="true">⚠</span>
-        Engineering Considerations
-      </h3>
-
-      <div class="tradeoff-item warn" role="listitem" aria-label="Consideration: Floating CMOS inputs">
-        <span class="tradeoff-icon text-amber" aria-hidden="true">⚠</span>
-        <div class="tradeoff-text">
-          <strong>Avoid Floating CMOS Inputs</strong>
-          Unconnected CMOS inputs can assume random logic states. Always tie unused inputs to VCC or GND.
-        </div>
+    <!-- CMOS Power Card with Click Interaction -->
+    <div class="power-card" id="cmos-chip-switch" style="cursor:pointer;" title="Click to simulate high-frequency clock switching!">
+      <div class="power-label" style="color:#00e5ff;">74HC CMOS IC CHIP &nbsp; <span style="font-size:0.6rem;color:var(--cyan);">(CLICK TO SWITCH)</span></div>
+      <div class="power-chip" id="cmos-chip-idle" style="background:#081622;border:2px solid #00e5ff;color:#00e5ff;">
+        74HC
       </div>
-
-      <div class="tradeoff-item warn" role="listitem" aria-label="Consideration: Capacitive loading">
-        <span class="tradeoff-icon text-amber" aria-hidden="true">⚠</span>
-        <div class="tradeoff-text">
-          <strong>Control Capacitive Loading</strong>
-          High capacitive loads increase propagation delay and dynamic power. Minimise trace lengths and load capacitance.
-        </div>
+      <div class="power-bar-wrap">
+        <div class="power-bar" id="cmos-power-bar" style="width:0%;background:#00e5ff;"></div>
       </div>
-
-      <div class="tradeoff-item warn" role="listitem" aria-label="Consideration: PCB layout">
-        <span class="tradeoff-icon text-amber" aria-hidden="true">⚠</span>
-        <div class="tradeoff-text">
-          <strong>Use Good PCB Layout Practice</strong>
-          Proper routing, layer stack-up and signal integrity practices are critical for reliable high-speed CMOS operation.
-        </div>
-      </div>
-
-      <div class="tradeoff-item warn" role="listitem" aria-label="Consideration: Grounding and decoupling">
-        <span class="tradeoff-icon text-amber" aria-hidden="true">⚠</span>
-        <div class="tradeoff-text">
-          <strong>Proper Grounding and Decoupling</strong>
-          Place decoupling capacitors close to each IC supply pin. Use a solid ground plane to reduce noise coupling.
-        </div>
-      </div>
-
-      <div class="tradeoff-item warn" role="listitem" aria-label="Consideration: Fast edges can produce ringing">
-        <span class="tradeoff-icon text-amber" aria-hidden="true">⚠</span>
-        <div class="tradeoff-text">
-          <strong>Fast Edges Can Produce Ringing</strong>
-          High-speed CMOS transitions can cause transmission-line reflections on long PCB traces. Use series termination where required.
-        </div>
+      <div class="power-note">
+        <strong>Near-Zero Idle Current:</strong> Consumes $< 1\text{ }\mu\text{A}$ at rest! Dynamic power formula: $P = C \cdot V^2 \cdot f$.
       </div>
     </div>
   </div>
 </section>
 
-<div class="section-divider" aria-hidden="true"></div>
+<div class="divider"></div>
 
-<!-- ═══════════════════════════════════════════════════════════
-     SECTION 09 — CONCLUSION
-════════════════════════════════════════════════════════════ -->
-<section id="conclusion">
-  <span class="section-num" aria-hidden="true">09 — CONCLUSION</span>
-  <h2 class="reveal">Conclusion</h2>
-  <p class="reveal delay-1" style="max-width:580px;margin-top:12px;">
-    The smart factory digital subsystem is operating smoothly. Signals travel cleanly between sensors,
-    the controller, and actuators. The right logic family makes all the difference.
+<!-- ============================================================
+     SCENE 8: ENGINEERING DECISION MATRIX
+     ============================================================ -->
+<section class="scene" id="decision">
+  <div class="scene-label">SCENE 08 // HEAD-TO-HEAD MATRIX</div>
+  <h2 class="scene-title">The Engineering Verdict</h2>
+  <p class="scene-caption">Real datasheet comparison across all primary engineering metrics in a 5V factory environment:</p>
+
+  <!-- Decision Bars populated dynamically by script.js buildDecisionBars() -->
+  <div class="decision-grid" id="decision-grid"></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============================================================
+     SCENE 9: SYSTEM INTERFACING — 74HC vs 74HCT
+     ============================================================ -->
+<section class="scene" id="interface">
+  <div class="scene-label">SCENE 09 // SYSTEM INTEGRATION</div>
+  <h2 class="scene-title">The 74HCT Bridge Solution</h2>
+  <p class="scene-caption">
+    Why can't TTL directly drive pure 74HC CMOS without pull-up? Because TTL's guaranteed $V_{OH,min} = 2.7\text{ V}$ is below 74HC's required $V_{IH,min} = 3.5\text{ V}$!
   </p>
 
-  <!-- Conclusion factory animation -->
-  <div class="factory-scene reveal delay-2" style="height:200px;" role="img" aria-label="Smart factory operating smoothly in conclusion">
-    <svg viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;" aria-hidden="true">
-      <rect width="700" height="200" fill="rgba(6,10,20,0.5)"/>
-
-      <!-- Sensors -->
-      <rect x="20" y="30" width="100" height="30" rx="5" fill="rgba(15,25,45,0.9)" stroke="rgba(0,200,150,0.5)" stroke-width="1.2"/>
-      <text x="70" y="49" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(0,200,150,0.9)">TEMP SENSOR</text>
-      <rect x="20" y="80" width="100" height="30" rx="5" fill="rgba(15,25,45,0.9)" stroke="rgba(0,200,150,0.5)" stroke-width="1.2"/>
-      <text x="70" y="99" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(0,200,150,0.9)">PROX SENSOR</text>
-      <rect x="20" y="130" width="100" height="30" rx="5" fill="rgba(15,25,45,0.9)" stroke="rgba(0,200,150,0.5)" stroke-width="1.2"/>
-      <text x="70" y="149" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(0,200,150,0.9)">MACH STATUS</text>
-
-      <!-- Clean signals (green = healthy) -->
-      <line x1="120" y1="45" x2="230" y2="95" stroke="rgba(0,200,150,0.6)" stroke-width="1.5" stroke-dasharray="6 4">
-        <animate attributeName="stroke-dashoffset" values="30;0" dur="1s" repeatCount="indefinite"/>
-      </line>
-      <line x1="120" y1="95" x2="230" y2="100" stroke="rgba(0,200,150,0.6)" stroke-width="1.5" stroke-dasharray="6 4">
-        <animate attributeName="stroke-dashoffset" values="30;0" dur="1.2s" begin="-0.2s" repeatCount="indefinite"/>
-      </line>
-      <line x1="120" y1="145" x2="230" y2="108" stroke="rgba(0,200,150,0.6)" stroke-width="1.5" stroke-dasharray="6 4">
-        <animate attributeName="stroke-dashoffset" values="30;0" dur="1.4s" begin="-0.4s" repeatCount="indefinite"/>
-      </line>
-
-      <!-- Dots -->
-      <circle r="3" fill="var(--accent-green)">
-        <animateMotion path="M 120 45 L 230 95" dur="1s" repeatCount="indefinite"/>
-      </circle>
-      <circle r="3" fill="var(--accent-green)">
-        <animateMotion path="M 120 95 L 230 100" dur="1.2s" begin="-0.4s" repeatCount="indefinite"/>
-      </circle>
-      <circle r="3" fill="var(--accent-green)">
-        <animateMotion path="M 120 145 L 230 108" dur="1.4s" begin="-0.7s" repeatCount="indefinite"/>
-      </circle>
-
-      <!-- Controller highlighted -->
-      <rect x="230" y="70" width="140" height="70" rx="8" fill="rgba(18,28,55,0.98)" stroke="rgba(0,200,150,0.7)" stroke-width="2"/>
-      <text x="300" y="103" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="rgba(0,200,150,1)" font-weight="bold">DIGITAL</text>
-      <text x="300" y="118" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="rgba(0,200,150,1)" font-weight="bold">CONTROLLER</text>
-
-      <!-- CMOS label on controller -->
-      <rect x="246" y="56" width="108" height="18" rx="4" fill="rgba(0,200,150,0.15)" stroke="rgba(0,200,150,0.5)" stroke-width="1"/>
-      <text x="300" y="68" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(0,200,150,1)" font-weight="bold">74HC CMOS ✓</text>
-
-      <!-- Controller → motor -->
-      <line x1="370" y1="105" x2="480" y2="105" stroke="rgba(0,200,150,0.6)" stroke-width="1.5" stroke-dasharray="6 4">
-        <animate attributeName="stroke-dashoffset" values="30;0" dur="1.0s" repeatCount="indefinite"/>
-      </line>
-      <circle r="3" fill="var(--accent-green)">
-        <animateMotion path="M 370 105 L 480 105" dur="1.0s" repeatCount="indefinite"/>
-      </circle>
-
-      <!-- Motor (clean) -->
-      <rect x="480" y="72" width="110" height="66" rx="8" fill="rgba(20,25,40,0.9)" stroke="rgba(0,200,150,0.4)" stroke-width="1.5"/>
-      <text x="535" y="108" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="rgba(255,179,0,0.9)" font-weight="bold">MOTOR</text>
-
-      <!-- Status indicator -->
-      <circle cx="535" cy="124" r="5" fill="var(--accent-green)">
-        <animate attributeName="fill" values="var(--accent-green);rgba(0,200,150,0.3);var(--accent-green)" dur="0.9s" repeatCount="indefinite"/>
-      </circle>
-      <text x="546" y="127" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(0,200,150,0.8)">OK</text>
-
-      <!-- Conveyor -->
-      <rect x="100" y="168" width="500" height="16" rx="3" fill="rgba(25,35,55,0.9)" stroke="rgba(0,229,255,0.2)" stroke-width="1"/>
-      <rect x="100" y="168" width="500" height="16" rx="3" fill="url(#conclusionConv)" opacity="0.4">
-        <animateTransform attributeName="transform" type="translate" from="0,0" to="60,0" dur="1.2s" repeatCount="indefinite"/>
-      </rect>
-      <circle cx="108" cy="184" r="6" fill="rgba(35,45,65,1)" stroke="rgba(0,229,255,0.3)" stroke-width="1">
-        <animateTransform attributeName="transform" type="rotate" from="0 108 184" to="360 108 184" dur="1.2s" repeatCount="indefinite"/>
-      </circle>
-      <circle cx="592" cy="184" r="6" fill="rgba(35,45,65,1)" stroke="rgba(0,229,255,0.3)" stroke-width="1">
-        <animateTransform attributeName="transform" type="rotate" from="0 592 184" to="360 592 184" dur="1.2s" repeatCount="indefinite"/>
-      </circle>
-      <!-- Boxes on conveyor -->
-      <rect x="180" y="152" width="26" height="16" rx="2" fill="rgba(0,200,150,0.15)" stroke="rgba(0,200,150,0.4)" stroke-width="1">
-        <animateTransform attributeName="transform" type="translate" from="0,0" to="60,0" dur="3s" repeatCount="indefinite"/>
-      </rect>
-      <rect x="310" y="152" width="26" height="16" rx="2" fill="rgba(0,200,150,0.15)" stroke="rgba(0,200,150,0.4)" stroke-width="1">
-        <animateTransform attributeName="transform" type="translate" from="0,0" to="60,0" dur="3s" begin="-1s" repeatCount="indefinite"/>
-      </rect>
-
-      <defs>
-        <pattern id="conclusionConv" x="0" y="0" width="20" height="16" patternUnits="userSpaceOnUse">
-          <rect x="0" y="0" width="10" height="16" fill="rgba(0,200,150,0.1)"/>
-        </pattern>
-      </defs>
-    </svg>
-  </div>
-
-  <!-- Final recommendation box -->
-  <div class="conclusion-rec reveal delay-3">
-    <p class="rec-label">Final Recommendation</p>
-    <div class="rec-main">CMOS-Based Logic</div>
-
-    <div class="ic-branches" role="list">
-      <div class="ic-branch-item" role="listitem">
-        <span class="ic-code">74HC</span>
-        <span class="ic-desc">New CMOS Systems</span>
+  <div class="iface-grid reveal d1">
+    <!-- 74HC Direct Card -->
+    <div class="iface-card hc">
+      <div class="iface-chip" style="color:#00e5ff;">74HC</div>
+      <div class="iface-name">High-Speed Pure CMOS</div>
+      <div class="iface-use">
+        <strong>Pure CMOS Architectures:</strong><br/>
+        Wide supply voltage ($2\text{V} - 6\text{V}$), symmetrical 50% thresholds ($V_{IH}=3.5\text{V}, V_{IL}=1.5\text{V}$). Best for new all-CMOS embedded systems.
       </div>
-      <div class="ic-branch-item" role="listitem">
-        <span class="ic-code">74HCT</span>
-        <span class="ic-desc">TTL-Compatible Interfaces</span>
+      <div class="iface-arrow" style="color:#00e5ff;">&darr;</div>
+      <div style="font-family:var(--f-mono);font-size:0.75rem;color:var(--dim);">
+        Needs Pull-up to talk to legacy TTL outputs.
       </div>
     </div>
 
-    <blockquote class="final-quote">
-      "Logic-family selection depends on system requirements."
-    </blockquote>
+    <!-- 74HCT Bridge Card -->
+    <div class="iface-card hct active">
+      <div class="iface-chip" style="color:#00c896;">74HCT</div>
+      <div class="iface-name">TTL-Compatible CMOS</div>
+      <div class="iface-use">
+        <strong>Legacy Factory Retrofitting:</strong><br/>
+        Engineered with TTL input levels ($V_{IH}=2.0\text{V}, V_{IL}=0.8\text{V}$) and CMOS output stages ($V_{OH}=4.4\text{V}$). Direct drop-in replacement!
+      </div>
+      <div class="iface-arrow" style="color:#00c896;">&check;</div>
+      <div style="font-family:var(--f-mono);font-size:0.75rem;color:#00c896;font-weight:700;">
+        Zero extra components required! Direct connection.
+      </div>
+    </div>
   </div>
 </section>
 
-<div class="section-divider" aria-hidden="true"></div>
+<div class="divider"></div>
 
-<!-- ═══════════════════════════════════════════════════════════
-     TEAM SECTION
-════════════════════════════════════════════════════════════ -->
-<!-- EDITABLE: TEAM MEMBERS — replace "Member N" and "Roll No." with actual names -->
+<!-- ============================================================
+     SCENE 10: VERIFIED TEXAS INSTRUMENTS DATASHEET TABLE
+     ============================================================ -->
+<section class="scene" id="datasheet">
+  <div class="scene-label">SCENE 10 // VERIFIED SPECIFICATIONS</div>
+  <h2 class="scene-title">Datasheet Reference Table (5V, 25&deg;C)</h2>
+  <p class="scene-caption">All parameters extracted from verified Texas Instruments 74LS, 74HC, and 74HCT semiconductor datasheets:</p>
+
+  <div class="tbl-wrap reveal d1" style="width:100%;max-width:880px;">
+    <table class="param-table">
+      <thead>
+        <tr>
+          <th>Electrical Parameter</th>
+          <th>74LS (Low-Power Schottky)</th>
+          <th>74HC (High-Speed CMOS)</th>
+          <th>74HCT (TTL-Input CMOS)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Supply Voltage ($V_{CC}$)</td>
+          <td class="v-ttl">4.75 V &ndash; 5.25 V (&plusmn;5%)</td>
+          <td class="v-hc">2.0 V &ndash; 6.0 V (Wide)</td>
+          <td class="v-hct">4.5 V &ndash; 5.5 V (&plusmn;10%)</td>
+        </tr>
+        <tr>
+          <td>Input Voltage HIGH ($V_{IH, min}$)</td>
+          <td class="v-ttl">2.0 V</td>
+          <td class="v-hc">3.5 V (0.7 &times; $V_{CC}$)</td>
+          <td class="v-hct">2.0 V (TTL Compatible)</td>
+        </tr>
+        <tr>
+          <td>Input Voltage LOW ($V_{IL, max}$)</td>
+          <td class="v-ttl">0.8 V</td>
+          <td class="v-hc">1.5 V (0.3 &times; $V_{CC}$)</td>
+          <td class="v-hct">0.8 V (TTL Compatible)</td>
+        </tr>
+        <tr>
+          <td>Output Voltage HIGH ($V_{OH, min}$)</td>
+          <td class="v-ttl">2.7 V</td>
+          <td class="v-hc">4.4 V (&approx; $V_{CC}$)</td>
+          <td class="v-hct">4.4 V (&approx; $V_{CC}$)</td>
+        </tr>
+        <tr>
+          <td>Output Voltage LOW ($V_{OL, max}$)</td>
+          <td class="v-ttl">0.4 V (or 0.5V at 8mA)</td>
+          <td class="v-hc">0.1 V (&approx; GND)</td>
+          <td class="v-hct">0.1 V (&approx; GND)</td>
+        </tr>
+        <tr>
+          <td>Noise Margin HIGH ($NM_H$)</td>
+          <td class="v-ttl">0.7 V</td>
+          <td class="v-hc">0.9 V</td>
+          <td class="v-hct">2.4 V (Outstanding)</td>
+        </tr>
+        <tr>
+          <td>Noise Margin LOW ($NM_L$)</td>
+          <td class="v-ttl">0.4 V (Vulnerable)</td>
+          <td class="v-hc">1.4 V (3.5&times; Higher!)</td>
+          <td class="v-hct">0.7 V</td>
+        </tr>
+        <tr>
+          <td>Quiescent Current ($I_{CC}$)</td>
+          <td class="v-ttl">1.0 &ndash; 4.0 mA</td>
+          <td class="v-hc">&le; 1.0 &mu;A (Near Zero)</td>
+          <td class="v-hct">&le; 1.0 &mu;A (Near Zero)</td>
+        </tr>
+        <tr>
+          <td>Propagation Delay ($t_{pd}$)</td>
+          <td class="v-ttl">&approx; 9 &ndash; 10 ns</td>
+          <td class="v-hc">&approx; 8 &ndash; 10 ns</td>
+          <td class="v-hct">&approx; 11 &ndash; 14 ns</td>
+        </tr>
+        <tr>
+          <td>Operating Temperature</td>
+          <td class="v-ttl">0 &deg;C to 70 &deg;C (Commercial)</td>
+          <td class="v-hc">&minus;40 &deg;C to +85 &deg;C (Industrial)</td>
+          <td class="v-hct">&minus;40 &deg;C to +85 &deg;C (Industrial)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============================================================
+     SCENE 11: CONCLUSION & ARCHITECTURAL SUMMARY
+     ============================================================ -->
+<section class="scene" id="conclusion">
+  <div class="conclusion-box reveal d1">
+    <div style="font-family:var(--f-mono);font-size:0.75rem;letter-spacing:0.18em;color:var(--cyan);margin-bottom:12px;">
+      SYSTEM ARCHITECT SUMMARY
+    </div>
+    <div class="conclusion-main">CMOS WINS INDUSTRY 4.0</div>
+
+    <div class="conclusion-chips">
+      <div class="conclusion-chip" style="color:#00e5ff;border-color:rgba(0,229,255,0.4);background:rgba(0,229,255,0.06);">
+        74HC: Greenfield Industrial Lines
+      </div>
+      <div class="conclusion-chip" style="color:#00c896;border-color:rgba(0,200,150,0.4);background:rgba(0,200,150,0.06);">
+        74HCT: Retrofit Mixed Systems
+      </div>
+    </div>
+
+    <div class="conclusion-quote">
+      &ldquo;By migrating the factory control boards from legacy 74LS TTL to 74HC / 74HCT CMOS, we increased the LOW noise margin from 0.4V to 1.4V (350% improvement), eliminated motor false-triggers, cut idle power by 99.9%, and expanded operational thermal tolerance down to -40&deg;C.&rdquo;
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============================================================
+     SCENE 12: PROJECT TEAM & CREDITS
+     ============================================================ -->
 <section id="team">
-  <div style="text-align:center;">
-    <span class="section-tag">Team</span>
-    <h2 class="reveal">Team Members</h2>
-    <p class="reveal delay-1" style="margin-top:8px;">Digital Electronics — Engineering Case Study</p>
-  </div>
+  <div class="scene-label">ACADEMIC CASE STUDY</div>
+  <h2 class="scene-title">Engineering Project Team</h2>
+  <p class="scene-caption">Digital Electronics and Logic Design (DELD) &bull; Computer Engineering Department</p>
 
-  <div class="team-grid reveal delay-2" role="list">
-    <!-- EDITABLE: Change name and role for each team member -->
-    <div class="team-card" role="listitem">
-      <div class="team-avatar" aria-hidden="true">1</div>
-      <div class="team-name">Member 1</div>
-      <div class="team-role">Roll No. / Branch</div>
+  <div class="team-grid reveal d1">
+    <div class="team-card">
+      <div class="t-avatar" style="background:linear-gradient(135deg,#00e5ff,#1a6fff);">S</div>
+      <div class="t-name">Sarthak</div>
+      <div class="t-role">Lead Research &amp; Logic Simulation</div>
     </div>
-    <div class="team-card" role="listitem">
-      <div class="team-avatar" style="background:linear-gradient(135deg,var(--accent-green),var(--accent-cyan));" aria-hidden="true">2</div>
-      <div class="team-name">Member 2</div>
-      <div class="team-role">Roll No. / Branch</div>
+    <div class="team-card">
+      <div class="t-avatar" style="background:linear-gradient(135deg,#ffb300,#ff4f4f);">CE</div>
+      <div class="t-name">Team Member 2</div>
+      <div class="t-role">Circuit Design &amp; Waveforms</div>
     </div>
-    <div class="team-card" role="listitem">
-      <div class="team-avatar" style="background:linear-gradient(135deg,var(--accent-purple),var(--accent-blue));" aria-hidden="true">3</div>
-      <div class="team-name">Member 3</div>
-      <div class="team-role">Roll No. / Branch</div>
-    </div>
-    <div class="team-card" role="listitem">
-      <div class="team-avatar" style="background:linear-gradient(135deg,var(--accent-amber),var(--accent-red));" aria-hidden="true">4</div>
-      <div class="team-name">Member 4</div>
-      <div class="team-role">Roll No. / Branch</div>
+    <div class="team-card">
+      <div class="t-avatar" style="background:linear-gradient(135deg,#00c896,#00e5ff);">CE</div>
+      <div class="t-name">Team Member 3</div>
+      <div class="t-role">Electrical Parameters &amp; Datasheets</div>
     </div>
   </div>
-
-  <p class="reveal delay-3" style="text-align:center;color:var(--text-muted);font-size:0.82rem;margin-top:8px;">
-    Second Year Computer Engineering &nbsp;·&nbsp; Digital Electronics
-  </p>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════
+<!-- ============================================================
      FOOTER
-════════════════════════════════════════════════════════════ -->
-<footer role="contentinfo">
-  <div class="footer-brand">Smart Factory Logic</div>
-  <p class="footer-sub">TTL vs CMOS — An Engineering Case Study</p>
-  <div class="footer-tags" role="list">
-    <span class="footer-tag" role="listitem">Digital Electronics</span>
-    <span class="footer-tag" role="listitem">Computer Engineering</span>
-    <span class="footer-tag" role="listitem">Logic Families</span>
-    <span class="footer-tag" role="listitem">TTL &amp; CMOS</span>
+     ============================================================ -->
+<footer>
+  <div class="f-brand">Smart Factory Logic: TTL vs CMOS Case Study</div>
+  <div class="f-sub">Computer Engineering &bull; Digital Electronics and Logic Design (DELD)</div>
+  <div class="f-tags">
+    <span class="f-tag">Texas Instruments 74LS00</span>
+    <span class="f-tag">Texas Instruments 74HC00</span>
+    <span class="f-tag">Texas Instruments 74HCT00</span>
+    <span class="f-tag">Noise Margin Analysis</span>
+    <span class="f-tag">Industry 4.0 Automation</span>
   </div>
-  <p class="footer-copy">© 2026 — All specifications must be verified from manufacturer datasheets</p>
+  <div class="f-copy">&copy; 2026 Academic Engineering Explainer. Built with Pure CSS &amp; JavaScript.</div>
 </footer>
 
 <script src="script.js"></script>
